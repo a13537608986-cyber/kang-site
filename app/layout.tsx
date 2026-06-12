@@ -51,17 +51,23 @@ export const metadata: Metadata = {
 };
 
 /**
- * 首帧前同步执行：
- * 1. 标记 html.js（进入动效只在有 JS 时生效，无 JS 内容直接可见）
- * 2. 本会话首次访问且未开启“减少动态”时标记 data-preload，
- *    CSS 据此显示加载动画，Preloader 组件负责播放与移除
+ * 首帧前同步执行：本会话首次访问且未开启「减少动态」时，
+ * 向 head 注入一个门控样式节点（#kang-preload-gate）显示加载动画，
+ * Preloader 组件播放完毕后移除该节点。
+ *
+ * 不修改 <html>/<body> 的任何属性 —— React 水合会比对它管理的元素属性，
+ * 预水合改动会触发 hydration mismatch；注入的 style 节点不归 React 管理，
+ * React 19 水合时会跳过 head 中的陌生节点。
+ * （进入动效的「有 JS 才隐藏」门控由 CSS 的 @media (scripting: enabled) 承担）
  */
 const bootScript = `
-document.documentElement.classList.add('js');
 try {
   if (!sessionStorage.getItem('kang:preloaded')
       && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.documentElement.setAttribute('data-preload', '');
+    var gate = document.createElement('style');
+    gate.id = 'kang-preload-gate';
+    gate.textContent = '#preloader{display:flex!important}html{overflow:hidden!important}';
+    document.head.appendChild(gate);
   }
 } catch (e) {}
 `;

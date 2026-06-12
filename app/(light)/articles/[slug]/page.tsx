@@ -16,7 +16,7 @@ import {
   toListItem,
 } from "@/lib/content/articles";
 import { extractToc } from "@/lib/toc";
-import { formatDateLong } from "@/lib/dates";
+import { formatDateTimeCompact } from "@/lib/dates";
 import { blogPostingJsonLd, breadcrumbJsonLd, ogBase } from "@/lib/seo";
 
 interface Props {
@@ -87,7 +87,7 @@ export default async function ArticlePage({ params }: Props) {
 
           <p className="type-label mt-10 flex flex-wrap items-baseline gap-x-4 gap-y-2 text-fg-muted">
             <span className="border border-line px-2 py-1">{article.category}</span>
-            <time dateTime={article.date}>{formatDateLong(article.date)}</time>
+            <time dateTime={article.date}>{formatDateTimeCompact(article.date)}</time>
             {article.draft ? (
               <span className="border border-line-strong bg-fg px-2 py-1 text-bg">
                 草稿 · 仅开发环境可见

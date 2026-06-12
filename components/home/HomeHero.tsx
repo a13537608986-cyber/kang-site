@@ -40,7 +40,7 @@ export function HomeHero() {
           );
 
         const play = () => entrance.play();
-        if (document.documentElement.hasAttribute("data-preload")) {
+        if (document.getElementById("kang-preload-gate")) {
           window.addEventListener("kang:preloader-done", play, { once: true });
         } else {
           play();
@@ -155,7 +155,7 @@ export function HomeHero() {
 
               <div className="hero-fade flex items-end justify-between md:col-span-7 md:justify-end md:gap-12">
                 <p className="type-label text-fg-faint" lang="en">
-                  EST. 2026 — PERSONAL ARCHIVE
+                  ARCHIVE SINCE 2023
                 </p>
                 <p
                   className="type-label flex items-center gap-3 text-fg-muted"

@@ -42,7 +42,7 @@ export default async function OgImage() {
           }}
         >
           <span>PERSONAL ARCHIVE</span>
-          <span>EST. 2026</span>
+          <span>ARCHIVE SINCE 2023</span>
         </div>
 
         <div

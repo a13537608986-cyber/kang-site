@@ -176,23 +176,27 @@ body:has([data-theme="light"].theme-scope) {
 }
 
 /* ---------- 进入动效（IntersectionObserver 驱动） ----------
-   仅在 html.js 且未开启减少动态时生效；无 JS 环境内容直接可见 */
+   仅在脚本可用且未开启减少动态时生效；无 JS 环境内容直接可见。
+   用 @media (scripting: enabled) 而非 html.js 标记：
+   纯 CSS 判断，不需要预水合修改 <html>（那会触发 hydration mismatch） */
 
-html.js [data-reveal] {
-  opacity: 0;
-  transform: translateY(22px);
-  transition:
-    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-  transition-delay: var(--reveal-delay, 0s);
-}
-html.js [data-reveal="in"] {
-  opacity: 1;
-  transform: none;
+@media (scripting: enabled) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(22px);
+    transition:
+      opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0s);
+  }
+  [data-reveal="in"] {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html.js [data-reveal] {
+@media (scripting: enabled) and (prefers-reduced-motion: reduce) {
+  [data-reveal] {
     opacity: 1;
     transform: none;
     transition: none;
@@ -200,8 +204,10 @@ html.js [data-reveal="in"] {
 }
 
 /* ---------- 加载动画 ----------
-   覆盖层默认不渲染；layout 中的内联脚本在首次会话访问时
-   给 <html> 加 data-preload，CSS 才显示，客户端组件负责收场 */
+   覆盖层默认不显示；layout 中的内联脚本在首次会话访问时
+   向 head 注入 #kang-preload-gate 样式节点（display:flex + 锁滚动），
+   Preloader 组件播放完毕后移除该节点收场。
+   不通过 <html> 属性门控，避免预水合属性改动造成 hydration mismatch */
 
 #preloader {
   position: fixed;
@@ -212,12 +218,6 @@ html.js [data-reveal="in"] {
   justify-content: center;
   background: var(--gray-0);
   color: var(--gray-10);
-}
-html[data-preload] #preloader {
-  display: flex;
-}
-html[data-preload] {
-  overflow: hidden;
 }
 #preloader.is-done {
   transition:

@@ -19,16 +19,31 @@ export function toTimestamp(iso: string): number {
   return t;
 }
 
-function partsOf(iso: string): { year: string; month: string; day: string } {
+function partsOf(iso: string): {
+  year: string;
+  month: string;
+  day: string;
+  hour: string;
+  minute: string;
+} {
   const parts = new Intl.DateTimeFormat("zh-CN", {
     timeZone: TIME_ZONE,
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
   }).formatToParts(new Date(toTimestamp(iso)));
   const get = (type: string) =>
     parts.find((p) => p.type === type)?.value ?? "";
-  return { year: get("year"), month: get("month"), day: get("day") };
+  return {
+    year: get("year"),
+    month: get("month"),
+    day: get("day"),
+    hour: get("hour"),
+    minute: get("minute"),
+  };
 }
 
 /** 「2023 年 8 月 21 日」 —— 文章详情页 */
@@ -41,6 +56,12 @@ export function formatDateLong(iso: string): string {
 export function formatDateCompact(iso: string): string {
   const { year, month, day } = partsOf(iso);
   return `${year}.${month}.${day}`;
+}
+
+/** 「2023.08.21 14:30」 —— 文章详情页（精确到分钟） */
+export function formatDateTimeCompact(iso: string): string {
+  const { year, month, day, hour, minute } = partsOf(iso);
+  return `${year}.${month}.${day} ${hour}:${minute}`;
 }
 
 /** 「08.21」 —— 年份时间线内的行（年份已由分组标题承担） */

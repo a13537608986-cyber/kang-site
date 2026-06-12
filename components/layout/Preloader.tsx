@@ -8,15 +8,16 @@ const PLAY_MS = 1250;
 /**
  * 加载动画：KANG 字标逐字上升 + 进度线，随后整层上移揭开页面。
  * 是否显示由 layout 中的内联脚本在首帧前决定（每会话一次、
- * prefers-reduced-motion 跳过），这里只负责播放与收场。
+ * prefers-reduced-motion 跳过）——脚本注入 #kang-preload-gate 样式节点
+ * 显示覆盖层并锁定滚动，这里只负责播放与收场（移除该节点）。
  */
 export function Preloader() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const html = document.documentElement;
+    const gate = document.getElementById("kang-preload-gate");
     const el = ref.current;
-    if (!el || !html.hasAttribute("data-preload")) return;
+    if (!el || !gate) return;
 
     let finished = false;
     const finish = () => {
@@ -27,7 +28,7 @@ export function Preloader() {
       } catch {
         // 隐私模式下忽略
       }
-      html.removeAttribute("data-preload");
+      gate.remove();
     };
 
     const timer = window.setTimeout(() => {
