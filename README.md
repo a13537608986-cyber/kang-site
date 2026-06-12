@@ -73,15 +73,16 @@ draft: true                          # true 仅开发环境可见，生产构建
 
 ## 占位内容替换清单（上线前）
 
-所有占位都带 `DEMO` 标记或「占位」字样，可全局搜索定位：
+个人资料（定位 / 简介 / 经历 / 专业方向 / 联系方式）已是真实信息，
+集中在 `lib/profile.ts` 与 `lib/site.ts`，后续直接改这两个文件即可。
+仍待替换的占位（带 `DEMO` 标记或「占位」字样，可全局搜索定位）：
 
 | 位置 | 做什么 |
 | --- | --- |
 | `content/articles/`、`content/projects/` | 删除全部 DEMO 文件（tags 含 `DEMO`），换真实内容 |
-| `lib/profile.ts` | 替换定位、简介（bio）、观点、履历、方法、工具、联系方式 |
-| `lib/site.ts` | 替换 author 的 email / GitHub / 公众号 |
 | `components/home/HeroVisual.tsx` | 按文件头注释换成真人照片或静音短视频 |
 | `public/images/` | 删除 DEMO SVG，放真实封面（建议 1600×1000，16:10） |
+| `lib/profile.ts` 的 `tools` | 替换标注（占位）的工具条目 |
 
 ## 部署（Vercel）
 

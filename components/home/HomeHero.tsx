@@ -109,7 +109,7 @@ export function HomeHero() {
         aria-label="首屏"
         className="relative overflow-hidden motion-safe:md:sticky motion-safe:md:top-0 motion-safe:md:h-svh"
       >
-        <h1 className="sr-only">KANG — AI 产品经理</h1>
+        <h1 className="sr-only">KANG · 李康 — AI 产品经理</h1>
 
         <div className="hero-stage flex min-h-svh flex-col will-change-transform">
           {/* 桌面端：占位视觉悬于右侧，被字标局部叠压 */}
@@ -142,7 +142,7 @@ export function HomeHero() {
             {/* 身份与定位 */}
             <div className="hairline-t mt-6 grid gap-8 pb-10 pt-6 md:grid-cols-12">
               <div className="hero-fade md:col-span-5">
-                <p className="type-headline text-xl">AI 产品经理</p>
+                <p className="type-headline text-xl">李康 · AI 产品经理</p>
                 <p className="mt-3 max-w-md text-[0.9375rem] leading-relaxed text-fg-muted">
                   {profile.positioning}
                 </p>
@@ -197,9 +197,9 @@ export function HomeHero() {
 
           <div className="vp-extra mt-14 grid gap-8 md:grid-cols-12">
             <p className="type-label text-fg-faint md:col-span-3" lang="en">
-              CURRENT FOCUS / 当前关注
+              FOCUS / 专业方向
             </p>
-            <ul className="flex flex-wrap gap-x-8 gap-y-3 md:col-span-9" aria-label="当前关注方向">
+            <ul className="flex flex-wrap gap-x-8 gap-y-3 md:col-span-9" aria-label="专业方向">
               {profile.focus.map((item, i) => (
                 <li key={item} className="flex items-baseline gap-2.5">
                   <span className="type-label text-fg-faint" aria-hidden="true">

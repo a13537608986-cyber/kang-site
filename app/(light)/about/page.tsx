@@ -3,19 +3,18 @@ import { Reveal } from "@/components/motion/Reveal";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { HeroVisual } from "@/components/home/HeroVisual";
-import { IconArrowUpRight } from "@/components/ui/icons";
 import { profile } from "@/lib/profile";
 import { breadcrumbJsonLd, ogBase, personJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "关于我",
   description:
-    "KANG，AI 产品经理。个人简介、职业经历、核心能力、产品方法与联系方式。",
+    "李康（Li Kang / KANG），AI 产品经理。个人简介、职业经历、核心能力、产品方法与联系方式。",
   alternates: { canonical: "/about" },
   openGraph: { ...ogBase, type: "profile", url: "/about", title: "关于我" },
 };
 
-/** 关于页：浅色为主 + 深色收尾章节。所有内容来自 lib/profile.ts 的占位数据。 */
+/** 关于页：浅色为主 + 深色收尾章节。所有内容来自 lib/profile.ts。 */
 export default function AboutPage() {
   return (
     <div className="pt-32">
@@ -33,7 +32,8 @@ export default function AboutPage() {
         <div className="mt-10 grid gap-12 md:grid-cols-12">
           <Reveal className="md:col-span-7">
             <p className="type-label text-fg-muted">
-              AI 产品经理 · <span lang="en">AI PRODUCT MANAGER</span>
+              {profile.name} · AI 产品经理 ·{" "}
+              <span lang="en">{profile.nameEn.toUpperCase()} / AI PRODUCT MANAGER</span>
             </p>
             <p className="type-headline mt-6 text-[clamp(1.5rem,3vw,2.25rem)]">
               {profile.positioning}
@@ -69,9 +69,6 @@ export default function AboutPage() {
             </Reveal>
           ))}
         </ol>
-        <p className="type-label mt-6 text-fg-faint">
-          以上为占位条目 · 替换 lib/profile.ts 中的 experience 即可
-        </p>
       </section>
 
       {/* 核心能力 */}
@@ -160,25 +157,20 @@ export default function AboutPage() {
               <span className="mt-3 block h-px w-full origin-left scale-x-0 bg-fg transition-transform duration-500 group-hover:scale-x-100 motion-reduce:transition-none" />
             </a>
             <div className="mt-12 flex flex-wrap items-center gap-x-10 gap-y-4">
-              {profile.contact.links
-                .filter((l) => l.href.startsWith("http"))
-                .map((link) => (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="type-label link-slide inline-flex items-center gap-1.5 text-fg-muted transition-colors hover:text-fg"
-                  >
-                    {link.label}
-                    <IconArrowUpRight width={12} height={12} />
-                  </a>
-                ))}
               <span className="type-label text-fg-muted">
-                公众号：{siteWechat()}
+                微信 · {profile.contact.wechat}
               </span>
+              {profile.contact.links.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="type-label link-slide text-fg-muted transition-colors hover:text-fg"
+                >
+                  {link.label}
+                </a>
+              ))}
               <span className="type-label ml-auto text-fg-muted">
-                {profile.contact.location} · {profile.contact.timezone}
+                {profile.contact.timezone}
               </span>
             </div>
           </Reveal>
@@ -186,9 +178,4 @@ export default function AboutPage() {
       </section>
     </div>
   );
-}
-
-function siteWechat(): string {
-  const link = profile.contact.links.find((l) => l.label === "公众号");
-  return link && "note" in link ? link.note : "占位";
 }

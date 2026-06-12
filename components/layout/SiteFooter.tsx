@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { siteConfig } from "@/lib/site";
 import { profile } from "@/lib/profile";
-import { IconArrowUpRight, IconRss } from "@/components/ui/icons";
+import { IconRss } from "@/components/ui/icons";
 
 /** 构建时固化的年份（站点全静态，构建年即版权年） */
 const buildYear = new Date().getFullYear();
@@ -46,16 +46,8 @@ export function SiteFooter() {
                 {profile.contact.email}
               </a>
             </li>
-            <li>
-              <a
-                href={siteConfig.author.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="link-slide inline-flex items-center gap-1.5 text-sm text-fg-muted transition-colors hover:text-fg"
-              >
-                GitHub
-                <IconArrowUpRight width={12} height={12} />
-              </a>
+            <li className="text-sm text-fg-muted">
+              微信 <span className="font-mono">{profile.contact.wechat}</span>
             </li>
             <li>
               <a
