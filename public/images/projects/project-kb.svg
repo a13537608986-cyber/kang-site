@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-label="DEMO 占位封面：知识库问答网络示意">
+  <rect width="1600" height="1000" fill="#181817"/>
+  <g stroke="#4c4c49" stroke-width="2">
+    <line x1="800" y1="500" x2="420" y2="280"/>
+    <line x1="800" y1="500" x2="1180" y2="260"/>
+    <line x1="800" y1="500" x2="380" y2="700"/>
+    <line x1="800" y1="500" x2="1220" y2="720"/>
+    <line x1="800" y1="500" x2="800" y2="180"/>
+    <line x1="420" y1="280" x2="800" y2="180"/>
+    <line x1="1180" y1="260" x2="800" y2="180"/>
+    <line x1="380" y1="700" x2="420" y2="280"/>
+    <line x1="1220" y1="720" x2="1180" y2="260"/>
+  </g>
+  <g fill="#181817" stroke="#9d9d99" stroke-width="3">
+    <circle cx="420" cy="280" r="46"/>
+    <circle cx="1180" cy="260" r="58"/>
+    <circle cx="380" cy="700" r="40"/>
+    <circle cx="1220" cy="720" r="50"/>
+    <circle cx="800" cy="180" r="36"/>
+  </g>
+  <circle cx="800" cy="500" r="80" fill="#f3f2ed"/>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" letter-spacing="4">
+    <text x="800" y="510" fill="#181817" font-size="30" text-anchor="middle">Q / A</text>
+    <text x="200" y="116" fill="#757572" font-size="26">KNOWLEDGE BASE · RAG</text>
+    <text x="1080" y="924" fill="#4c4c49" font-size="26">DEMO COVER · 替换占位</text>
+  </g>
+</svg>

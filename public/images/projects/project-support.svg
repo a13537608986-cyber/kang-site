@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-label="DEMO 占位封面：工单自动分流示意">
+  <rect width="1600" height="1000" fill="#181817"/>
+  <rect x="240" y="420" width="220" height="160" fill="none" stroke="#f3f2ed" stroke-width="3"/>
+  <path d="M460 500h180" stroke="#9d9d99" stroke-width="3"/>
+  <path d="M640 460l60 40-60 40z" fill="#9d9d99"/>
+  <rect x="700" y="420" width="220" height="160" fill="none" stroke="#9d9d99" stroke-width="3" stroke-dasharray="12 10"/>
+  <g stroke="#757572" stroke-width="2" fill="none">
+    <path d="M920 470 L1120 260"/>
+    <path d="M920 500 L1120 500"/>
+    <path d="M920 530 L1120 740"/>
+  </g>
+  <rect x="1120" y="200" width="240" height="120" fill="#f3f2ed"/>
+  <rect x="1120" y="440" width="240" height="120" fill="none" stroke="#9d9d99" stroke-width="3"/>
+  <rect x="1120" y="680" width="240" height="120" fill="none" stroke="#4c4c49" stroke-width="3"/>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="24" letter-spacing="3">
+    <text x="270" y="508" fill="#f3f2ed">TICKETS</text>
+    <text x="730" y="508" fill="#9d9d99">CLASSIFY</text>
+    <text x="1148" y="268" fill="#181817">AUTO ≥.9</text>
+    <text x="1148" y="508" fill="#9d9d99">ASSIST</text>
+    <text x="1148" y="748" fill="#757572">HUMAN</text>
+    <text x="200" y="116" fill="#757572" font-size="26">SUPPORT TRIAGE · CONFIDENCE</text>
+    <text x="1080" y="924" fill="#4c4c49" font-size="26">DEMO COVER · 替换占位</text>
+  </g>
+</svg>

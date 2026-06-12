@@ -1,26 +1,492 @@
 @import "tailwindcss";
 
+/* ============================================================
+   KANG — 设计系统
+   黑白灰编辑档案风格。所有颜色经由语义变量引用；
+   强调色 --accent 是唯一的全局可替换强调变量（当前为中性色，
+   将来换成任何品牌色只需改 [data-theme] 里的两行）。
+   ============================================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* 灰阶（唯一的原始色板） */
+  --gray-0: #060606;
+  --gray-1: #0d0d0c;
+  --gray-2: #181817;
+  --gray-3: #2a2a28;
+  --gray-4: #4c4c49;
+  --gray-5: #6e6e6b; /* 浅色主题 fg-muted ≥ 4.5:1 */
+  --gray-6: #9d9d99;
+  --gray-7: #c6c6c1;
+  --gray-8: #e6e5e0;
+  --gray-9: #f3f2ed;
+  --gray-10: #faf9f5;
+
+  /* 结构常量 */
+  --hairline: 1px;
+  --radius-panel: 2px;
+  --header-h: 4rem;
+  --gutter: clamp(1.25rem, 4vw, 4rem);
+  --section-y: clamp(5rem, 12vh, 9rem);
+
+  /* 字体出口（在 layout.tsx 注入具体 next/font 变量） */
+  --font-display: var(--font-archivo), var(--font-noto-sc), "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-body: var(--font-archivo), var(--font-noto-sc), "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SF Mono", "PingFang SC",
+    monospace;
+}
+
+/* ---------- 主题作用域 ---------- */
+
+[data-theme="dark"] {
+  --bg: var(--gray-1);
+  --bg-raised: var(--gray-2);
+  --bg-sunken: var(--gray-0);
+  --fg: var(--gray-9);
+  --fg-muted: var(--gray-6);
+  --fg-faint: var(--gray-5);
+  --line: color-mix(in srgb, var(--gray-9) 14%, transparent);
+  --line-strong: color-mix(in srgb, var(--gray-9) 32%, transparent);
+  --accent: var(--gray-10); /* 可替换强调色（深色主题取值） */
+  --accent-contrast: var(--gray-1);
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --bg: var(--gray-9);
+  --bg-raised: var(--gray-10);
+  --bg-sunken: var(--gray-8);
+  --fg: var(--gray-1);
+  --fg-muted: var(--gray-5);
+  --fg-faint: var(--gray-6);
+  --line: color-mix(in srgb, var(--gray-1) 14%, transparent);
+  --line-strong: color-mix(in srgb, var(--gray-1) 36%, transparent);
+  --accent: var(--gray-0); /* 可替换强调色（浅色主题取值） */
+  --accent-contrast: var(--gray-10);
+  color-scheme: light;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-bg-raised: var(--bg-raised);
+  --color-bg-sunken: var(--bg-sunken);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-faint: var(--fg-faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-contrast: var(--accent-contrast);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ---------- 基础 ---------- */
+
+html {
+  scrollbar-gutter: stable;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--gray-1); /* 默认深色，避免落地页白闪 */
+  font-family: var(--font-body);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 浅色路由组挂载时，让 body（含橡皮筋回弹区域）跟随浅色 */
+body:has([data-theme="light"].theme-scope) {
+  background: var(--gray-9);
+}
+
+.theme-scope {
+  background: var(--bg);
+  color: var(--fg);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+::selection {
+  background: var(--accent, var(--gray-4));
+  color: var(--accent-contrast, var(--gray-10));
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent, currentColor);
+  outline-offset: 3px;
+}
+
+/* ---------- 版式工具 ---------- */
+
+.container-k {
+  width: 100%;
+  max-width: 96rem;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* 巨型展示字（KANG 字标、页面大标题） */
+.type-mega {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-stretch: 125%;
+  letter-spacing: -0.03em;
+  line-height: 0.86;
+  text-transform: uppercase;
+}
+
+/* 章节中文大标题 */
+.type-headline {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.12;
+}
+
+/* 编号 / 栏目名 / 元信息：等宽小字系统 */
+.type-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hairline-t {
+  border-top: var(--hairline) solid var(--line);
+}
+.hairline-b {
+  border-bottom: var(--hairline) solid var(--line);
+}
+
+/* 链接下划线动效（从左滑入） */
+.link-slide {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: left calc(100% - 0.05em);
+  background-repeat: no-repeat;
+  transition: background-size 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.link-slide:hover,
+.link-slide:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* ---------- 进入动效（IntersectionObserver 驱动） ----------
+   仅在 html.js 且未开启减少动态时生效；无 JS 环境内容直接可见 */
+
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0s);
+}
+html.js [data-reveal="in"] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---------- 加载动画 ----------
+   覆盖层默认不渲染；layout 中的内联脚本在首次会话访问时
+   给 <html> 加 data-preload，CSS 才显示，客户端组件负责收场 */
+
+#preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: var(--gray-0);
+  color: var(--gray-10);
+}
+html[data-preload] #preloader {
+  display: flex;
+}
+html[data-preload] {
+  overflow: hidden;
+}
+#preloader.is-done {
+  transition:
+    transform 0.7s cubic-bezier(0.76, 0, 0.24, 1),
+    visibility 0s 0.7s;
+  transform: translateY(-100%);
+  visibility: hidden;
+}
+.preloader-letter {
+  display: inline-block;
+  transform: translateY(110%);
+  animation: preloader-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes preloader-rise {
+  to {
+    transform: translateY(0);
+  }
+}
+#preloader .preloader-bar {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: 18vh;
+  height: 1px;
+  background: color-mix(in srgb, var(--gray-10) 18%, transparent);
+  overflow: hidden;
+}
+#preloader .preloader-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--gray-10);
+  transform-origin: left;
+  transform: scaleX(0);
+  animation: preloader-fill 0.9s 0.15s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+@keyframes preloader-fill {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ---------- 阅读正文（MDX prose） ---------- */
+
+.prose {
+  font-size: 1.0625rem;
+  line-height: 1.95;
+  color: var(--fg);
+  overflow-wrap: break-word;
+}
+.prose > * + * {
+  margin-top: 1.5em;
+}
+.prose h2,
+.prose h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  scroll-margin-top: calc(var(--header-h) + 1.5rem);
+}
+.prose h2 {
+  font-size: 1.5rem;
+  margin-top: 2.8em;
+  padding-top: 1.4em;
+  border-top: var(--hairline) solid var(--line);
+}
+.prose h3 {
+  font-size: 1.1875rem;
+  margin-top: 2.2em;
+}
+.prose h2 > a,
+.prose h3 > a {
+  text-decoration: none;
+  color: inherit;
+}
+.prose p > a,
+.prose li > a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  text-decoration-color: var(--fg-faint);
+  transition: text-decoration-color 0.2s;
+}
+.prose p > a:hover,
+.prose li > a:hover {
+  text-decoration-color: currentColor;
+}
+.prose strong {
+  font-weight: 700;
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.4em;
+}
+.prose ul {
+  list-style: none;
+}
+.prose ul > li {
+  position: relative;
+}
+.prose ul > li::before {
+  content: "";
+  position: absolute;
+  left: -1.25em;
+  top: 0.9em;
+  width: 0.5em;
+  height: 1px;
+  background: var(--fg-muted);
+}
+.prose ol {
+  list-style: decimal;
+}
+.prose ol > li::marker {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--fg-muted);
+}
+.prose li + li {
+  margin-top: 0.5em;
+}
+.prose blockquote {
+  border-left: 2px solid var(--fg);
+  padding: 0.25em 0 0.25em 1.4em;
+  color: var(--fg-muted);
+}
+.prose blockquote strong {
+  color: var(--fg);
+}
+.prose hr {
+  border: 0;
+  border-top: var(--hairline) solid var(--line);
+  margin-block: 3em;
+}
+.prose img {
+  width: 100%;
+  height: auto;
+  border: var(--hairline) solid var(--line);
+  background: var(--bg-raised);
+}
+.prose figure > figcaption {
+  margin-top: 0.75em;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--fg-muted);
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+.prose table th {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-align: left;
+  color: var(--fg-muted);
+  border-bottom: var(--hairline) solid var(--line-strong);
+  padding: 0.6em 1em 0.6em 0;
+}
+.prose table td {
+  border-bottom: var(--hairline) solid var(--line);
+  padding: 0.8em 1em 0.8em 0;
+  vertical-align: top;
+}
+.prose .table-wrap {
+  overflow-x: auto;
+}
+.prose code:not(pre code) {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--bg-sunken);
+  border: var(--hairline) solid var(--line);
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-panel);
+}
+.prose pre {
+  background: var(--gray-1);
+  color: var(--gray-8);
+  border: var(--hairline) solid var(--line);
+  border-radius: var(--radius-panel);
+  padding: 1.25rem 1.5rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+.prose pre code {
+  font-family: var(--font-mono);
+  background: none;
+  border: 0;
+  padding: 0;
+}
+/* rehype-pretty-code 的代码标题与行号 */
+.prose figure[data-rehype-pretty-code-figure] > [data-rehype-pretty-code-title] {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  border: var(--hairline) solid var(--line);
+  border-bottom: 0;
+  padding: 0.5rem 1.5rem;
+  background: var(--bg-sunken);
+}
+.prose iframe,
+.prose video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: var(--hairline) solid var(--line);
+  background: var(--gray-1);
+}
+
+/* 深色主题下的正文（项目详情页） */
+[data-theme="dark"] .prose pre {
+  background: var(--gray-0);
+}
+
+/* ---------- 首屏占位视觉 ---------- */
+
+/* 工程图纸式网格底纹 */
+.blueprint-grid {
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 2.5rem 2.5rem;
+}
+
+/* 缓慢往返的扫描线（减少动态时停止） */
+.scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--fg-muted) 30%,
+    var(--fg-muted) 70%,
+    transparent
+  );
+  animation: scan-y 7s ease-in-out infinite alternate;
+}
+@keyframes scan-y {
+  from {
+    top: 8%;
+  }
+  to {
+    top: 92%;
+  }
+}
+
+/* 空心描边大字（年份标题等承载信息的场景用 fg-muted 保证可读） */
+.type-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--fg-muted);
+}
+
+/* ---------- 杂项 ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

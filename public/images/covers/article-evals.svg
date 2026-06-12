@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-label="DEMO 占位封面：评估矩阵示意">
+  <rect width="1600" height="1000" fill="#181817"/>
+  <g stroke="#4c4c49" stroke-width="2" fill="none">
+    <path d="M300 200h1000M300 320h1000M300 440h1000M300 560h1000M300 680h1000M300 800h1000"/>
+    <path d="M300 200v600M500 200v600M700 200v600M900 200v600M1100 200v600M1300 200v600"/>
+  </g>
+  <g fill="#f3f2ed">
+    <rect x="520" y="340" width="160" height="80"/>
+    <rect x="920" y="220" width="160" height="80"/>
+    <rect x="320" y="580" width="160" height="80"/>
+    <rect x="1120" y="460" width="160" height="80"/>
+    <rect x="720" y="700" width="160" height="80"/>
+  </g>
+  <g fill="none" stroke="#9d9d99" stroke-width="3">
+    <path d="M340 250l28 30 44-52"/>
+    <path d="M740 370l28 30 44-52"/>
+    <path d="M1140 610l28 30 44-52"/>
+    <path d="M540 730l60 50M600 730l-60 50"/>
+    <path d="M940 610l60 50M1000 610l-60 50"/>
+  </g>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="26" letter-spacing="4" fill="#757572">
+    <text x="300" y="160">EVAL SUITE / 评估集</text>
+    <text x="1080" y="924" fill="#4c4c49">DEMO COVER · 替换占位</text>
+  </g>
+</svg>
