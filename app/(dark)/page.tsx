@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { HomeHero } from "@/components/home/HomeHero";
+import { HeroMedia } from "@/components/home/HeroMedia";
 import { CapabilityGrid } from "@/components/home/CapabilityGrid";
 import { FeaturedProjects } from "@/components/home/FeaturedProjects";
 import { FeaturedWriting } from "@/components/home/FeaturedWriting";
@@ -28,7 +29,8 @@ export default function HomePage() {
       <JsonLd data={websiteJsonLd()} />
       <JsonLd data={personJsonLd()} />
 
-      <HomeHero />
+      {/* HeroMedia 是服务端组件（构建时检测素材文件），经 props 注入客户端 Hero */}
+      <HomeHero media={<HeroMedia />} />
       <CapabilityGrid />
       <FeaturedProjects projects={projects} />
       <FeaturedWriting articles={articles} />

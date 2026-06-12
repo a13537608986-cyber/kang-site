@@ -80,9 +80,17 @@ draft: true                          # true 仅开发环境可见，生产构建
 | 位置 | 做什么 |
 | --- | --- |
 | `content/articles/`、`content/projects/` | 删除全部 DEMO 文件（tags 含 `DEMO`），换真实内容 |
-| `components/home/HeroVisual.tsx` | 按文件头注释换成真人照片或静音短视频 |
+| `public/videos/kang-hero.mp4` | 放入首页全屏横版视频（1920×1030），构建时自动检测启用 |
+| `public/images/kang-hero-poster.jpg` | 桌面 poster（与视频同构图，视频加载前显示） |
+| `public/images/kang-hero-mobile.jpg` | 移动端竖版 poster（移动端默认不播横版视频） |
+| `components/home/HeroVisual.tsx` | 关于页 4:5 照片占位，换成真人照片 |
 | `public/images/` | 删除 DEMO SVG，放真实封面（建议 1600×1000，16:10） |
 | `lib/profile.ts` 的 `tools` | 替换标注（占位）的工具条目 |
+
+首页 Hero 媒体的路径与人物构图（`objectPosition`）集中在
+`components/home/HeroMedia.tsx` 顶部的 `MEDIA` 配置。若后续要做
+人物在 KANG 字母前方的穿插遮挡，需要透明背景人物视频 / 抠像素材，
+见该文件头部注释。
 
 ## 部署（Vercel）
 

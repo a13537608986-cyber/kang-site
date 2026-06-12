@@ -1,11 +1,9 @@
 /**
- * 首屏真人素材占位。
+ * 关于页 4:5 真人照片占位（首页已改用全屏视频 HeroMedia，不再使用本组件）。
  *
- * 【替换方式】拿到真人照片 / 短视频后，把整段占位 div 换成：
- *   照片：<Image src="/images/portrait.jpg" alt="KANG 的照片" fill priority
- *               sizes="(max-width: 768px) 90vw, 38vw" className="object-cover" />
- *   视频：<video src="/videos/portrait.mp4" poster="/images/portrait-poster.jpg"
- *               muted loop playsInline autoPlay className="h-full w-full object-cover" />
+ * 【替换方式】拿到真人照片后，把整段占位 div 换成：
+ *   <Image src="/images/portrait.jpg" alt="李康的照片" fill priority
+ *          sizes="(max-width: 768px) 90vw, 38vw" className="object-cover" />
  * 外层容器（宽高比 4:5、发丝边框）保持不变即可。
  */
 export function HeroVisual() {

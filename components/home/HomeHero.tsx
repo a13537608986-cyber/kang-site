@@ -1,19 +1,22 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, type ReactNode } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/components/motion/gsap";
 import { profile } from "@/lib/profile";
-import { HeroVisual } from "@/components/home/HeroVisual";
 
 const LETTERS = ["K", "A", "N", "G"];
 
 /**
- * 首屏：巨型字标 + 身份 + 真人素材占位，
+ * 首屏：全屏真人视频背景（HeroMedia，经 props 注入的服务端组件）+
+ * 巨型字标与身份信息作为网页内容覆盖其上。
  * 第二幕「核心观点」以贴覆（sticky cover）方式滑入，
  * GSAP 负责入场与滚动联动；移动端与减少动态环境退化为普通文档流。
+ *
+ * 文字布局刻意只占顶部一行与底部信息条，中部留给画面中的人物；
+ * 正式视频到位后若构图冲突，优先调 HeroMedia 的 objectPosition。
  */
-export function HomeHero() {
+export function HomeHero({ media }: { media: ReactNode }) {
   const root = useRef<HTMLDivElement>(null);
   const vpRef = useRef<HTMLElement>(null);
 
@@ -50,7 +53,7 @@ export function HomeHero() {
         };
       });
 
-      // 桌面端滚动联动：观点面板贴覆时，首幕整体后退、观点逐行揭示
+      // 桌面端滚动联动：观点面板贴覆时，首幕（含视频背景）整体后退、观点逐行揭示
       mm.add(
         "(prefers-reduced-motion: no-preference) and (min-width: 768px)",
         () => {
@@ -104,19 +107,18 @@ export function HomeHero() {
 
   return (
     <div ref={root}>
-      {/* 第一幕 —— 桌面端 sticky，被第二幕贴覆 */}
+      {/* 第一幕 —— 全屏视频 Hero，桌面端 sticky，被第二幕贴覆 */}
       <section
         aria-label="首屏"
         className="relative overflow-hidden motion-safe:md:sticky motion-safe:md:top-0 motion-safe:md:h-svh"
       >
         <h1 className="sr-only">KANG · 李康 — AI 产品经理</h1>
 
-        <div className="hero-stage flex min-h-svh flex-col will-change-transform">
-          {/* 桌面端：占位视觉悬于右侧，被字标局部叠压 */}
-          <div className="absolute right-[var(--gutter)] top-[16%] z-0 hidden w-[clamp(220px,23vw,330px)] md:block">
-            <HeroVisual />
-          </div>
+        <div className="hero-stage relative flex min-h-svh flex-col will-change-transform">
+          {/* 背景媒体层：视频 / poster / DEMO 占位（HeroMedia 服务端组件） */}
+          <div className="absolute inset-0 z-0">{media}</div>
 
+          {/* 内容层 */}
           <div className="container-k relative z-10 flex flex-1 flex-col pt-24">
             <div className="hero-fade flex items-baseline justify-between gap-4">
               <p className="type-label text-fg-muted" lang="en">
@@ -139,21 +141,16 @@ export function HomeHero() {
               ))}
             </div>
 
-            {/* 身份与定位 */}
-            <div className="hairline-t mt-6 grid gap-8 pb-10 pt-6 md:grid-cols-12">
-              <div className="hero-fade md:col-span-5">
+            {/* 底部信息条：身份与定位 */}
+            <div className="hairline-t mt-6 grid gap-6 pb-10 pt-6 md:grid-cols-12 md:gap-8">
+              <div className="hero-fade md:col-span-6">
                 <p className="type-headline text-xl">李康 · AI 产品经理</p>
                 <p className="mt-3 max-w-md text-[0.9375rem] leading-relaxed text-fg-muted">
                   {profile.positioning}
                 </p>
               </div>
 
-              {/* 移动端：占位视觉进入文档流 */}
-              <div className="hero-fade w-3/4 max-w-xs justify-self-end md:hidden">
-                <HeroVisual />
-              </div>
-
-              <div className="hero-fade flex items-end justify-between md:col-span-7 md:justify-end md:gap-12">
+              <div className="hero-fade flex items-end justify-between md:col-span-6 md:justify-end md:gap-12">
                 <p className="type-label text-fg-faint" lang="en">
                   ARCHIVE SINCE 2023
                 </p>
