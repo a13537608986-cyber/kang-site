@@ -5,11 +5,10 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "@/components/motion/gsap";
 import { profile } from "@/lib/profile";
 
-const LETTERS = ["K", "A", "N", "G"];
-
 /**
  * 首屏：全屏真人视频背景（HeroMedia，经 props 注入的服务端组件）+
- * 巨型字标与身份信息作为网页内容覆盖其上。
+ * 身份信息作为网页内容覆盖其上。
+ * 巨型 KANG 字标不在前景渲染 —— 由正式视频内合成（与人物的遮挡关系在片内完成）。
  * 第二幕「核心观点」以贴覆（sticky cover）方式滑入，
  * GSAP 负责入场与滚动联动；移动端与减少动态环境退化为普通文档流。
  *
@@ -24,23 +23,18 @@ export function HomeHero({ media }: { media: ReactNode }) {
     () => {
       const mm = gsap.matchMedia();
 
-      // 入场：字标逐字升起，元信息级联浮现。
-      // 首访时加载动画覆盖在上层，等它开始揭开（kang:preloader-done）再播放，
-      // 让字标升起与覆盖层上滑形成衔接。
+      // 入场：元信息级联浮现（字标已移入视频，不再有逐字动画）。
+      // 首访时加载动画覆盖在上层，等它开始揭开（kang:preloader-done）再播放。
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         const entrance = gsap
           .timeline({ paused: true, defaults: { ease: "power4.out" } })
-          .from(".hero-letter", {
-            yPercent: 115,
-            duration: 1.05,
-            stagger: 0.07,
-            delay: 0.15,
-          })
-          .from(
-            ".hero-fade",
-            { y: 22, autoAlpha: 0, duration: 0.8, stagger: 0.08 },
-            "-=0.55",
-          );
+          .from(".hero-fade", {
+            y: 22,
+            autoAlpha: 0,
+            duration: 0.8,
+            stagger: 0.08,
+            delay: 0.2,
+          });
 
         const play = () => entrance.play();
         if (document.getElementById("kang-preload-gate")) {
@@ -129,20 +123,8 @@ export function HomeHero({ media }: { media: ReactNode }) {
               </p>
             </div>
 
-            {/* 巨型字标 */}
-            <div
-              className="type-mega mt-auto select-none whitespace-nowrap text-[clamp(5.5rem,21vw,21rem)]"
-              aria-hidden="true"
-            >
-              {LETTERS.map((letter) => (
-                <span key={letter} className="inline-block overflow-hidden align-bottom">
-                  <span className="hero-letter inline-block">{letter}</span>
-                </span>
-              ))}
-            </div>
-
-            {/* 底部信息条：身份与定位 */}
-            <div className="hairline-t mt-6 grid gap-6 pb-10 pt-6 md:grid-cols-12 md:gap-8">
+            {/* 底部信息条：身份与定位（巨型 KANG 字标由视频内合成，前景不渲染） */}
+            <div className="hairline-t mt-auto grid gap-6 pb-10 pt-6 md:grid-cols-12 md:gap-8">
               <div className="hero-fade md:col-span-6">
                 <p className="type-headline text-xl">李康 · AI 产品经理</p>
                 <p className="mt-3 max-w-md text-[0.9375rem] leading-relaxed text-fg-muted">
