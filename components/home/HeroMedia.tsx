@@ -60,7 +60,7 @@ export function HeroMedia() {
 
       {/* 可读性渐变：克制的顶部渐暗 + 底部渐隐 + 轻暗角，不用厚重整层遮罩 */}
       <div aria-hidden="true">
-        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[color-mix(in_srgb,var(--gray-0)_55%,transparent)] to-transparent" />
+        <div className="absolute inset-x-0 top-0 h-44 bg-gradient-to-b from-[color-mix(in_srgb,var(--gray-0)_72%,transparent)] to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-[36%] bg-gradient-to-t from-[var(--gray-1)] via-[color-mix(in_srgb,var(--gray-1)_50%,transparent)] to-transparent" />
         <div
           className="absolute inset-0"

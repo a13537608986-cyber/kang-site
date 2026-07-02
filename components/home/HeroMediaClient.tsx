@@ -35,10 +35,8 @@ export function HeroMediaClient({
     if (!video) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    // 按挂载时的断点决定一次视频源；跨断点 resize 属边缘场景，不动态切换
-    const isDesktop = window.matchMedia("(min-width: 768px)").matches;
-    const src = isDesktop ? desktopVideo : mobileVideo;
-    if (!src) return;
+    const breakpoint = window.matchMedia("(min-width: 768px)");
+    let activeSrc: string | null = null;
 
     // 只有 play() 真正成功才淡入；autoplay 被拒或加载失败一律停留在 poster
     const tryPlay = () => {
@@ -47,20 +45,39 @@ export function HeroMediaClient({
         () => setPlaying(false),
       );
     };
+
+    // 按当前断点选择视频源；跨断点（转屏、拉伸窗口）时重新决定：
+    // 桌面 → 播横版；移动端无竖版视频 → 卸载视频只留 poster
+    const applySource = () => {
+      const src = breakpoint.matches ? desktopVideo : mobileVideo;
+      if (src === activeSrc) return;
+      activeSrc = src;
+      setPlaying(false);
+      if (!src) {
+        video.pause();
+        video.removeAttribute("src");
+        video.load();
+        return;
+      }
+      video.src = src;
+      tryPlay();
+    };
+
     const onError = () => setPlaying(false);
     // 后台标签页中 autoplay 会被拒，回到前台时重试
     const onVisibilityChange = () => {
-      if (!document.hidden && video.paused) tryPlay();
+      if (!document.hidden && video.paused && activeSrc) tryPlay();
     };
 
     video.addEventListener("error", onError);
     document.addEventListener("visibilitychange", onVisibilityChange);
-    video.src = src;
-    tryPlay();
+    breakpoint.addEventListener("change", applySource);
+    applySource();
 
     return () => {
       video.removeEventListener("error", onError);
       document.removeEventListener("visibilitychange", onVisibilityChange);
+      breakpoint.removeEventListener("change", applySource);
       video.pause();
       video.removeAttribute("src");
       video.load();
