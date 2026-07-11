@@ -491,6 +491,46 @@ body:has([data-theme="light"].theme-scope) {
   -webkit-text-stroke: 1px var(--fg-muted);
 }
 
+/* ---------- 深色主题固定氛围背板 ----------
+   一张柔光菱形图固定铺在整个深色主题背后，缓解纯黑单调；
+   首屏视频不透明覆盖其上，往下滚动各段落透出同一层柔光（贯穿全站）。
+   深色布局的 theme-scope 置为透明，由本背板提供底色 + 光形。 */
+.theme-scope--ambient {
+  background: transparent;
+}
+.dark-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--gray-1);
+}
+.dark-ambient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("/images/dark-ambient.jpg") no-repeat center 12%;
+  background-size: min(150vh, 130%) auto;
+  opacity: 0.16;
+}
+/* 不透明深色段落的局部氛围（如首屏贴覆的核心观点区，需自带底色盖住视频，
+   固定背板透不过来，故给一份同款光形保持一致） */
+.section-ambient {
+  position: relative;
+  background-color: var(--gray-1);
+  overflow: hidden;
+}
+.section-ambient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: url("/images/dark-ambient.jpg") no-repeat center 12%;
+  background-size: min(150vh, 130%) auto;
+  opacity: 0.16;
+}
+
 /* ---------- 杂项 ---------- */
 
 @media (prefers-reduced-motion: reduce) {
