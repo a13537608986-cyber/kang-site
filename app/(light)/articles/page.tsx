@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { ArticleFeaturedRail } from "@/components/articles/ArticleFeaturedRail";
 import { ArticleExplorer } from "@/components/articles/ArticleExplorer";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { IconRss } from "@/components/ui/icons";
-import { getAllArticles, getFeaturedArticles, toListItem } from "@/lib/content/articles";
+import { getAllArticles, toListItem } from "@/lib/content/articles";
 import { breadcrumbJsonLd, ogBase } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -16,10 +15,9 @@ export const metadata: Metadata = {
 
 export default function ArticlesPage() {
   const all = getAllArticles().map(toListItem);
-  const featured = getFeaturedArticles(5).map(toListItem);
 
   return (
-    <div className="container-k pb-[var(--section-y)] pt-32">
+    <div className="container-k max-w-5xl pb-[var(--section-y)] pt-32">
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "首页", path: "/" },
@@ -27,30 +25,22 @@ export default function ArticlesPage() {
         ])}
       />
 
-      <header className="mb-14">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <h1 className="type-mega text-[clamp(3.5rem,10vw,9rem)]">
-            Writing
-          </h1>
-          <a
-            href="/rss.xml"
-            className="type-label link-slide mb-3 inline-flex items-center gap-1.5 text-fg-muted hover:text-fg"
-          >
-            RSS 订阅
-            <IconRss width={12} height={12} />
-          </a>
-        </div>
-        <p className="mt-4 max-w-2xl text-base leading-relaxed text-fg-muted">
-          文章 · 这里没有功利的说教，只有不加滤镜的踩坑复盘与实操经验。
+      <header className="mb-14 text-center">
+        <h1 className="type-mega text-[clamp(3.5rem,10vw,8rem)]">Writing</h1>
+        <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-fg-muted">
+          这里没有功利的说教，只有不加滤镜的踩坑复盘与实操经验。
           保持记录，是为了在浪潮里不掉队。
         </p>
+        <a
+          href="/rss.xml"
+          className="type-label link-slide mt-5 inline-flex items-center gap-1.5 text-fg-muted hover:text-fg"
+        >
+          RSS 订阅
+          <IconRss width={12} height={12} />
+        </a>
       </header>
 
-      <ArticleFeaturedRail articles={featured} />
-
-      <div className="mt-16">
-        <ArticleExplorer articles={all} />
-      </div>
+      <ArticleExplorer articles={all} />
     </div>
   );
 }

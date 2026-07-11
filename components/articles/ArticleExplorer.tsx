@@ -4,19 +4,15 @@ import { useId, useMemo, useState } from "react";
 import Link from "next/link";
 import type { ArticleListItem } from "@/lib/content/articles";
 import { CATEGORIES } from "@/lib/content/schema";
-import {
-  filterArticles,
-  groupByYear,
-  topTags,
-  type CategoryFilter,
-} from "@/lib/search";
-import { formatDateMonthDay } from "@/lib/dates";
+import { filterArticles, type CategoryFilter } from "@/lib/search";
+import { byDateDesc, formatDateCompact, yearOf } from "@/lib/dates";
 import { CoverImage } from "@/components/ui/CoverImage";
 import { IconClose, IconSearch } from "@/components/ui/icons";
 
 /**
- * 文章档案：搜索（标题/摘要/栏目/标签）+ 分类筛选 + 年份时间线。
- * 纯客户端过滤，逻辑在 lib/search.ts。
+ * 文章档案 —— 经典列表形式：
+ * 上方为分类胶囊导航（即筛选器），下方为横向大卡片列表（时间倒序，
+ * 跨年份处插入低调的年份标记）。搜索覆盖标题/摘要/栏目/标签。
  */
 export function ArticleExplorer({ articles }: { articles: ArticleListItem[] }) {
   const inputId = useId();
@@ -24,11 +20,9 @@ export function ArticleExplorer({ articles }: { articles: ArticleListItem[] }) {
   const [category, setCategory] = useState<CategoryFilter>("all");
 
   const filtered = useMemo(
-    () => filterArticles(articles, category, query),
+    () => [...filterArticles(articles, category, query)].sort(byDateDesc),
     [articles, category, query],
   );
-  const groups = useMemo(() => groupByYear(filtered), [filtered]);
-  const tags = useMemo(() => topTags(articles), [articles]);
   const isFiltering = query.trim() !== "" || category !== "all";
 
   const countOf = (c: CategoryFilter) =>
@@ -38,95 +32,81 @@ export function ArticleExplorer({ articles }: { articles: ArticleListItem[] }) {
 
   return (
     <section aria-label="文章档案">
-      {/* 控制区 */}
-      <div className="border-y border-line py-6">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          {/* 分类筛选 */}
-          <div role="group" aria-label="按栏目筛选" className="flex flex-wrap gap-2">
-            {(["all", ...CATEGORIES] as const).map((c) => {
-              const active = category === c;
-              return (
-                <button
-                  key={c}
-                  type="button"
-                  aria-pressed={active}
-                  onClick={() => setCategory(c)}
-                  className={`type-label border px-3 py-2 transition-colors ${
-                    active
-                      ? "border-fg bg-fg text-bg"
-                      : "border-line text-fg-muted hover:border-line-strong hover:text-fg"
-                  }`}
-                >
-                  {c === "all" ? "全部" : c}
-                  <span className="ml-1.5 opacity-60">{countOf(c)}</span>
-                </button>
-              );
-            })}
-          </div>
+      {/* ——— 上方：分类导航 ——— */}
+      <div className="flex flex-col items-center gap-8 border-b border-line pb-14">
+        <p className="type-label text-fg-muted">
+          TOPICS <span className="mx-2" aria-hidden="true">/</span> 按栏目浏览
+        </p>
 
-          {/* 搜索 */}
-          <div className="relative w-full lg:max-w-xs">
-            <label htmlFor={inputId} className="sr-only">
-              搜索文章（标题、摘要、栏目、标签）
-            </label>
-            <IconSearch
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-fg-faint"
-              width={14}
-              height={14}
-            />
-            <input
-              id={inputId}
-              type="search"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="搜索标题 / 摘要 / 栏目 / 标签"
-              className="w-full border border-line bg-bg-raised py-2.5 pl-9 pr-9 font-mono text-sm placeholder:text-fg-muted focus:border-line-strong"
-            />
-            {query ? (
-              <button
-                type="button"
-                onClick={() => setQuery("")}
-                aria-label="清空搜索"
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-fg-muted hover:text-fg"
-              >
-                <IconClose width={12} height={12} />
-              </button>
-            ) : null}
-          </div>
-        </div>
-
-        {/* 标签快捷入口 */}
-        <div className="mt-5 flex flex-wrap items-baseline gap-x-3 gap-y-2">
-          <span className="type-label text-fg-muted">TAGS</span>
-          {tags.map((tag) => {
-            const active = query.trim() === tag;
+        <div
+          role="group"
+          aria-label="按栏目筛选"
+          className="flex max-w-3xl flex-wrap justify-center gap-3"
+        >
+          {(["all", ...CATEGORIES] as const).map((c) => {
+            const active = category === c;
             return (
               <button
-                key={tag}
+                key={c}
                 type="button"
                 aria-pressed={active}
-                onClick={() => setQuery(active ? "" : tag)}
-                className={`type-label transition-colors ${
-                  active ? "text-fg underline underline-offset-4" : "text-fg-muted hover:text-fg"
+                onClick={() => setCategory(c)}
+                className={`rounded-full border px-5 py-2.5 text-sm font-medium transition-colors ${
+                  active
+                    ? "border-fg bg-fg text-bg"
+                    : "border-line bg-bg-raised text-fg-muted hover:border-line-strong hover:text-fg"
                 }`}
               >
-                #{tag}
+                {c === "all" ? "全部" : c}
+                <span className={`ml-2 font-mono text-xs ${active ? "opacity-70" : "text-fg-faint"}`}>
+                  {countOf(c)}
+                </span>
               </button>
             );
           })}
         </div>
+
+        {/* 搜索 */}
+        <div className="relative w-full max-w-md">
+          <label htmlFor={inputId} className="sr-only">
+            搜索文章（标题、摘要、栏目、标签）
+          </label>
+          <IconSearch
+            className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-fg-faint"
+            width={15}
+            height={15}
+          />
+          <input
+            id={inputId}
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="搜索标题、摘要、栏目、标签"
+            className="w-full rounded-full border border-line bg-bg-raised py-3 pl-12 pr-12 text-sm placeholder:text-fg-muted focus:border-line-strong"
+          />
+          {query ? (
+            <button
+              type="button"
+              onClick={() => setQuery("")}
+              aria-label="清空搜索"
+              className="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-fg-muted hover:text-fg"
+            >
+              <IconClose width={12} height={12} />
+            </button>
+          ) : null}
+        </div>
       </div>
 
       {/* 结果状态 */}
-      <p className="type-label mt-6 text-fg-muted" role="status" aria-live="polite">
+      <p className="type-label mt-8 text-fg-muted" role="status" aria-live="polite">
         {isFiltering
           ? `${filtered.length} 篇匹配 / ${articles.length} 篇`
           : `共 ${articles.length} 篇 · 按发布时间排列`}
       </p>
 
-      {/* 年份时间线 */}
-      {groups.length === 0 ? (
-        <div className="border-b border-line py-20 text-center">
+      {/* ——— 下方：经典列表 ——— */}
+      {filtered.length === 0 ? (
+        <div className="border-b border-line py-24 text-center">
           <p className="type-headline text-xl text-fg-muted">没有匹配的文章</p>
           <button
             type="button"
@@ -141,74 +121,82 @@ export function ArticleExplorer({ articles }: { articles: ArticleListItem[] }) {
         </div>
       ) : (
         <div className="mt-4">
-          {groups.map((group) => (
-            <section
-              key={group.year}
-              aria-label={`${group.year} 年`}
-              className="grid border-t border-line py-10 first:border-t-0 md:grid-cols-[9rem_1fr] md:gap-10"
-            >
-              <h2 className="type-mega type-outline text-[2.75rem] md:sticky md:top-28 md:self-start">
-                {group.year}
-              </h2>
-              <ul className="max-md:mt-6">
-                {group.items.map((article) => (
-                  <ArticleRow key={article.slug} article={article} />
-                ))}
-              </ul>
-            </section>
-          ))}
+          {filtered.map((article, i) => {
+            const year = yearOf(article.date);
+            const prevYear = i > 0 ? yearOf(filtered[i - 1].date) : null;
+            return (
+              <div key={article.slug}>
+                {year !== prevYear ? (
+                  <p
+                    className="type-label mt-12 flex items-center gap-4 text-fg-faint first:mt-8"
+                    aria-label={`${year} 年`}
+                  >
+                    {year}
+                    <span className="h-px flex-1 bg-line" aria-hidden="true" />
+                  </p>
+                ) : null}
+                <ArticleCard article={article} />
+              </div>
+            );
+          })}
         </div>
       )}
     </section>
   );
 }
 
-function ArticleRow({ article }: { article: ArticleListItem }) {
+function ArticleCard({ article }: { article: ArticleListItem }) {
+  const tags = article.tags.filter((t) => t !== "DEMO").slice(0, 3);
   return (
-    <li className="border-b border-line first:border-t-0 last:border-b-0">
+    <article className="border-b border-line py-10 last:border-b-0">
       <Link
         href={`/articles/${article.slug}`}
-        className={`group grid grid-cols-[3rem_1fr] items-center gap-x-5 ${
-          article.cover ? "py-5 md:grid-cols-[3rem_1fr_auto_8rem]" : "py-4 md:grid-cols-[3rem_1fr_auto]"
+        className={`group grid items-center gap-6 md:gap-10 ${
+          article.cover ? "md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]" : ""
         }`}
       >
-        <time dateTime={article.date} className="type-label text-fg-muted">
-          {formatDateMonthDay(article.date)}
-        </time>
-
-        <span className="min-w-0">
-          <span className="link-slide text-base font-medium md:text-lg">
-            {article.title}
-          </span>
-          {article.cover ? (
-            <span className="mt-1 block truncate text-sm text-fg-muted max-md:hidden">
-              {article.summary}
-            </span>
-          ) : null}
-        </span>
-
-        <span className="flex items-center gap-3 max-md:col-start-2 max-md:mt-1.5">
-          <span className="type-label text-fg-muted">{article.category}</span>
-          <span className="type-label hidden text-fg-muted lg:inline">
-            {article.tags
-              .filter((t) => t !== "DEMO")
-              .slice(0, 3)
-              .map((t) => `#${t}`)
-              .join(" ")}
-          </span>
-        </span>
-
         {article.cover ? (
-          <span className="relative hidden aspect-[16/10] overflow-hidden border border-line md:block">
+          <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-bg-sunken">
             <CoverImage
               src={article.cover}
               alt=""
-              sizes="128px"
-              className="transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none"
+              sizes="(max-width: 768px) 100vw, 40vw"
+              className="transition-transform duration-500 group-hover:scale-[1.04] motion-reduce:transition-none"
             />
-          </span>
+            <span className="absolute left-4 top-4 rounded-full bg-bg-raised/95 px-3 py-1.5 text-xs font-medium text-fg shadow-sm">
+              {article.category}
+            </span>
+          </div>
         ) : null}
+
+        <div className="min-w-0">
+          <p className="type-label flex flex-wrap items-baseline gap-x-3 gap-y-1 text-fg-muted">
+            {!article.cover ? <span>{article.category}</span> : null}
+            <time dateTime={article.date}>{formatDateCompact(article.date)}</time>
+            {tags.length > 0 ? (
+              <span className="text-fg-faint">{tags.map((t) => `#${t}`).join(" ")}</span>
+            ) : null}
+          </p>
+
+          <h3 className="type-headline mt-3 text-[clamp(1.25rem,2.4vw,1.75rem)] leading-snug">
+            <span className="link-slide">{article.title}</span>
+          </h3>
+
+          <p className="mt-3 line-clamp-2 max-w-xl text-[0.9375rem] leading-relaxed text-fg-muted">
+            {article.summary}
+          </p>
+
+          <span className="type-label mt-5 inline-flex items-center gap-2 text-fg-faint transition-colors group-hover:text-fg">
+            阅读全文
+            <span
+              className="inline-block transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none"
+              aria-hidden="true"
+            >
+              →
+            </span>
+          </span>
+        </div>
       </Link>
-    </li>
+    </article>
   );
 }
