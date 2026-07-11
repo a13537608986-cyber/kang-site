@@ -57,7 +57,7 @@ title: "文章标题"
 slug: "article-slug"
 date: "2026-06-12T10:00:00+08:00"   # 必须带时区，排序唯一依据
 summary: "一两句摘要，列表与 SEO 共用。"
-category: "AI 产品"                  # AI 产品 | 行业观察 | 方法论 | 实践复盘
+category: "AI纪元"                   # AI纪元 | AI 洞察 | 实战复盘 | 个人随想
 tags: ["标签A", "标签B"]
 cover: "/images/covers/xxx.svg"      # 无封面写 null（列表自动紧凑排版）
 featured: false                      # true 进入列表顶部精选轨道与首页

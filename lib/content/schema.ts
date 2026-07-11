@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { ISO_WITH_TZ } from "@/lib/dates";
 
-/** 文章栏目（新增栏目改这里即可，筛选 UI 自动跟随） */
-export const CATEGORIES = ["AI 产品", "行业观察", "方法论", "实践复盘"] as const;
+/** 文章栏目（与旧站 kangkangpm.com 保持一致；新增栏目改这里即可，筛选 UI 自动跟随） */
+export const CATEGORIES = ["AI纪元", "AI 洞察", "实战复盘", "个人随想"] as const;
 export type Category = (typeof CATEGORIES)[number];
 
 export const PROJECT_TYPES = ["product", "case-study"] as const;
