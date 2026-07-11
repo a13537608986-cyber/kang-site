@@ -99,12 +99,21 @@ export const profile = {
     },
   ],
 
-  /** 常用工具 —— 标注（占位）的条目待替换 */
+  /** 常用工具 —— 关于页用的分组视图（标注占位的条目待替换） */
   tools: [
     { group: "模型与开发", items: ["Claude", "OpenAI API", "Cursor", "Python"] },
     { group: "设计与原型", items: ["Figma", "Pencil", "HTML 原型"] },
     { group: "文档与协作", items: ["Notion", "飞书", "Linear"] },
     { group: "分析", items: ["SQL", "Amplitude（占位）"] },
+  ],
+
+  /** 常用工具 —— 侧栏图标列表视图（icon 为占位缩写，接入真实品牌图标后替换） */
+  stack: [
+    { name: "Claude Code", icon: "CC", desc: "AI 编程与终端助手" },
+    { name: "Codex", icon: "Cx", desc: "AI 编程助手" },
+    { name: "Hermes", icon: "He", desc: "工作流自动化（占位）" },
+    { name: "VS Code", icon: "VS", desc: "代码编辑器" },
+    { name: "Cursor", icon: "Cu", desc: "AI 代码编辑器" },
   ],
 
   /** 联系方式（真实公开信息） */

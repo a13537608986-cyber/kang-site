@@ -1,3 +1,6 @@
+import fs from "node:fs";
+import path from "node:path";
+import Image from "next/image";
 import Link from "next/link";
 import { profile } from "@/lib/profile";
 import type { ArticleListItem } from "@/lib/content/articles";
@@ -5,11 +8,25 @@ import { FeaturedCarousel } from "@/components/articles/FeaturedCarousel";
 import { IconArrowRight } from "@/components/ui/icons";
 
 /**
+ * 头像：构建时检测 public/images/portrait.{jpg,png,webp} 是否存在，
+ * 存在则显示真人照片（圆框内），否则回退为「康」字圆标。
+ * 放入照片文件即自动启用，无需改代码。
+ */
+function resolvePortrait(): string | null {
+  for (const ext of ["jpg", "jpeg", "png", "webp"]) {
+    const rel = `/images/portrait.${ext}`;
+    if (fs.existsSync(path.join(process.cwd(), "public", rel))) return rel;
+  }
+  return null;
+}
+
+/**
  * 文章列表页右侧栏：关于卡 + 精选文章轮播 + 工作经验卡 + 常用工具卡。
  * 卡片用投影悬浮（.card-float），无线框。
  * 桌面端整列 sticky 悬浮；窄屏时随文档流落到列表下方。
  */
 export function ArticleSidebar({ featured }: { featured: ArticleListItem[] }) {
+  const portrait = resolvePortrait();
   return (
     <aside className="space-y-8" aria-label="侧栏">
       {/* 关于卡 */}
@@ -19,15 +36,22 @@ export function ArticleSidebar({ featured }: { featured: ArticleListItem[] }) {
         </h2>
 
         <div className="mt-5 flex items-center gap-4">
-          {/* 头像占位 —— 有真人照片后替换为：
-              <Image src="/images/portrait.jpg" alt="李康的照片" width={56} height={56}
-                     className="h-14 w-14 rounded-full object-cover" /> */}
-          <span
-            aria-hidden="true"
-            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-fg text-xl font-bold text-bg"
-          >
-            康
-          </span>
+          {portrait ? (
+            <Image
+              src={portrait}
+              alt={`${profile.name}的照片`}
+              width={56}
+              height={56}
+              className="h-14 w-14 shrink-0 rounded-full object-cover"
+            />
+          ) : (
+            <span
+              aria-hidden="true"
+              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-fg text-xl font-bold text-bg"
+            >
+              康
+            </span>
+          )}
           <div className="min-w-0">
             <p className="text-base font-semibold">{profile.name}</p>
             <p className="type-label mt-1 text-fg-muted">正在进化的 AI 产品经理</p>
@@ -108,21 +132,27 @@ export function ArticleSidebar({ featured }: { featured: ArticleListItem[] }) {
         </Link>
       </section>
 
-      {/* 常用工具卡 */}
+      {/* 常用工具卡（图标列表；图标为占位缩写，接入真实品牌图标后替换） */}
       <section aria-labelledby="sidebar-toolkit" className="card-float p-7">
         <h2 id="sidebar-toolkit" className="type-label text-fg-muted">
           TOOLKIT <span className="mx-2" aria-hidden="true">/</span> 常用工具
         </h2>
-        <div className="mt-5 space-y-5">
-          {profile.tools.map((group) => (
-            <div key={group.group}>
-              <p className="type-label text-fg-faint">{group.group}</p>
-              <p className="mt-1.5 text-sm leading-relaxed text-fg-muted">
-                {group.items.join(" · ")}
-              </p>
-            </div>
+        <ul className="mt-5 space-y-4">
+          {profile.stack.map((tool) => (
+            <li key={tool.name} className="flex items-center gap-3.5">
+              <span
+                aria-hidden="true"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-fg font-mono text-xs font-semibold text-bg"
+              >
+                {tool.icon}
+              </span>
+              <span className="min-w-0">
+                <span className="block text-sm font-semibold">{tool.name}</span>
+                <span className="block text-sm text-fg-muted">{tool.desc}</span>
+              </span>
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
     </aside>
   );

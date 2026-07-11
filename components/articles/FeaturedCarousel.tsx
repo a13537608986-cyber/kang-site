@@ -42,7 +42,7 @@ export function FeaturedCarousel({ articles }: { articles: ArticleListItem[] }) 
           <Link
             key={article.slug}
             href={`/articles/${article.slug}`}
-            className="group relative block aspect-[4/5] w-full shrink-0 snap-center overflow-hidden bg-bg-sunken"
+            className="group relative block aspect-[4/3] w-full shrink-0 snap-center overflow-hidden bg-bg-sunken"
           >
             {article.cover ? (
               <CoverImage
