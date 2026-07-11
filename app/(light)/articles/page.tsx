@@ -9,7 +9,7 @@ import { breadcrumbJsonLd, ogBase } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "文章",
   description:
-    "KANG 的文章档案：AI 产品、行业观察、方法论与实践复盘，按年份与栏目归档。",
+    "李康的文章档案：AIGC 实战、商业自动化与产品思考，不加滤镜的踩坑复盘，按年份与栏目归档。",
   alternates: { canonical: "/articles" },
   openGraph: { ...ogBase, type: "website", url: "/articles", title: "文章" },
 };
@@ -41,8 +41,8 @@ export default function ArticlesPage() {
           </a>
         </div>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-fg-muted">
-          文章 · 关于 AI 产品的判断、行业观察、方法论与实践复盘。
-          观点持续修正，以最新发布为准。
+          文章 · 这里没有功利的说教，只有不加滤镜的踩坑复盘与实操经验。
+          保持记录，是为了在浪潮里不掉队。
         </p>
       </header>
 

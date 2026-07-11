@@ -9,7 +9,7 @@ import { breadcrumbJsonLd, ogBase, personJsonLd } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "关于我",
   description:
-    "李康（Li Kang / KANG），AI 产品经理。个人简介、职业经历、核心能力、产品方法与联系方式。",
+    "李康（Li Kang / KANG），正在进化的 AI 产品经理。个人简介、职业经历、核心能力、产品方法与联系方式。",
   alternates: { canonical: "/about" },
   openGraph: { ...ogBase, type: "profile", url: "/about", title: "关于我" },
 };

@@ -106,7 +106,7 @@ export function HomeHero({ media }: { media: ReactNode }) {
         aria-label="首屏"
         className="relative overflow-hidden motion-safe:md:sticky motion-safe:md:top-0 motion-safe:md:h-svh"
       >
-        <h1 className="sr-only">KANG · 李康 — AI 产品经理</h1>
+        <h1 className="sr-only">KANG · 李康 — 正在进化的 AI 产品经理</h1>
 
         <div className="hero-stage relative flex min-h-svh flex-col will-change-transform">
           {/* 背景媒体层：视频 / poster / DEMO 占位（HeroMedia 服务端组件） */}
@@ -126,7 +126,7 @@ export function HomeHero({ media }: { media: ReactNode }) {
             {/* 底部信息条：身份与定位（巨型 KANG 字标由视频内合成，前景不渲染） */}
             <div className="hairline-t mt-auto grid gap-6 pb-10 pt-6 md:grid-cols-12 md:gap-8">
               <div className="hero-fade md:col-span-6">
-                <p className="type-headline text-xl">李康 · AI 产品经理</p>
+                <p className="type-headline text-xl">李康 · 正在进化的 AI 产品经理</p>
                 <p className="mt-3 max-w-md text-[0.9375rem] leading-relaxed text-fg-muted">
                   {profile.positioning}
                 </p>
