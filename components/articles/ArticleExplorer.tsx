@@ -33,7 +33,7 @@ export function ArticleExplorer({ articles }: { articles: ArticleListItem[] }) {
   return (
     <section aria-label="文章档案">
       {/* ——— 上方：分类导航 ——— */}
-      <div className="flex flex-col items-center gap-8 border-b border-line pb-14">
+      <div className="flex flex-col items-start gap-7 border-b border-line pb-12">
         <p className="type-label text-fg-muted">
           TOPICS <span className="mx-2" aria-hidden="true">/</span> 按栏目浏览
         </p>
@@ -41,7 +41,7 @@ export function ArticleExplorer({ articles }: { articles: ArticleListItem[] }) {
         <div
           role="group"
           aria-label="按栏目筛选"
-          className="flex max-w-3xl flex-wrap justify-center gap-3"
+          className="flex flex-wrap gap-3"
         >
           {(["all", ...CATEGORIES] as const).map((c) => {
             const active = category === c;
