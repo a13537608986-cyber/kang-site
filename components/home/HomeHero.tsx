@@ -151,13 +151,13 @@ export function HomeHero({ media }: { media: ReactNode }) {
         </div>
       </section>
 
-      {/* 第二幕 —— 核心观点（贴覆面板；不透明底色盖住视频 + 局部同款光形） */}
+      {/* 第二幕 —— 核心观点（贴覆面板） */}
       <section
         ref={vpRef}
         aria-label="核心观点"
-        className="section-ambient hairline-t z-10 flex min-h-[92svh] items-center"
+        className="hairline-t relative z-10 flex min-h-[92svh] items-center bg-bg-sunken"
       >
-        <div className="container-k relative z-10 py-28">
+        <div className="container-k py-28">
           <p className="type-label text-fg-muted">
             <span aria-hidden="true">00</span>
             <span className="mx-3" aria-hidden="true">/</span>
