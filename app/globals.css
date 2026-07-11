@@ -274,32 +274,33 @@ body:has([data-theme="light"].theme-scope) {
 
 /* ---------- 阅读正文（MDX prose） ---------- */
 
+/* 公众号式长文阅读节奏：适中字号、松紧适度的行距与段距，
+   标题靠字号与留白建立层级，不用整行分割线。 */
 .prose {
-  font-size: 1.125rem;
-  line-height: 1.95;
+  font-size: 1.0625rem;
+  line-height: 1.8;
   color: var(--fg);
   overflow-wrap: break-word;
+  letter-spacing: 0.01em;
 }
 .prose > * + * {
-  margin-top: 1.5em;
+  margin-top: 1.25em;
 }
 .prose h2,
 .prose h3 {
   font-family: var(--font-display);
   font-weight: 700;
-  line-height: 1.3;
+  line-height: 1.35;
   letter-spacing: -0.01em;
   scroll-margin-top: calc(var(--header-h) + 1.5rem);
 }
 .prose h2 {
-  font-size: 1.5rem;
-  margin-top: 2.8em;
-  padding-top: 1.4em;
-  border-top: var(--hairline) solid var(--line);
+  font-size: 1.375rem;
+  margin-top: 2em;
 }
 .prose h3 {
-  font-size: 1.1875rem;
-  margin-top: 2.2em;
+  font-size: 1.125rem;
+  margin-top: 1.75em;
 }
 .prose h2 > a,
 .prose h3 > a {
