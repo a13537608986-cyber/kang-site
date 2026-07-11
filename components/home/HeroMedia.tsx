@@ -26,10 +26,10 @@ const MEDIA = {
   mobilePoster: "/images/kang-hero-mobile.jpg",
   /**
    * 人物主体在画面中的位置（object-position）。
-   * 正式视频到位后按实际构图调整，保证不裁掉人物头部与主体，
-   * 例如人物偏右时改为 "70% center"。
+   * 当前素材人物居中、面部约在画面 42% 高度，
+   * "center 40%" 保证超宽视口裁切上下时不裁头部。
    */
-  objectPosition: "center 30%",
+  objectPosition: "center 40%",
 } as const;
 
 function inPublic(relPath: string): boolean {
