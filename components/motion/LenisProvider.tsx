@@ -1,23 +1,30 @@
 "use client";
 
 import { useEffect, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 import { gsap, ScrollTrigger } from "@/components/motion/gsap";
 
 declare global {
   interface Window {
-    /** 供目录等组件复用的平滑滚动实例（仅桌面端存在） */
+    /** 供目录等组件复用的平滑滚动实例（仅首页桌面端存在） */
     __lenis?: Lenis;
   }
 }
 
 /**
- * 桌面端平滑滚动。
- * 仅在精细指针 + ≥1024px + 未开启「减少动态」时启用；
- * 移动端与减少动态环境保持原生滚动。
+ * 平滑滚动。仅在【首页】桌面端启用 —— 首页有与 GSAP ScrollTrigger 联动的
+ * 钉住/贴覆转场，需要 Lenis 统一时钟。
+ *
+ * 文章等阅读页刻意使用原生滚动：长文阅读对可靠性的要求高于「平滑感」，
+ * 且这些页面没有滚动联动动画，Lenis 在此只带来风险（惯性/边界卡顿）而无收益。
  */
 export function LenisProvider({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+
   useEffect(() => {
+    if (pathname !== "/") return;
+
     const fine = window.matchMedia("(pointer: fine)").matches;
     const wide = window.matchMedia("(min-width: 1024px)").matches;
     const reduced = window.matchMedia(
@@ -42,7 +49,7 @@ export function LenisProvider({ children }: { children: ReactNode }) {
       lenis.destroy();
       delete window.__lenis;
     };
-  }, []);
+  }, [pathname]);
 
   return <>{children}</>;
 }
