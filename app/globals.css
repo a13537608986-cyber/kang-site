@@ -275,7 +275,7 @@ body:has([data-theme="light"].theme-scope) {
 /* ---------- 阅读正文（MDX prose） ---------- */
 
 .prose {
-  font-size: 1.0625rem;
+  font-size: 1.125rem;
   line-height: 1.95;
   color: var(--fg);
   overflow-wrap: break-word;
@@ -366,8 +366,9 @@ body:has([data-theme="light"].theme-scope) {
 .prose img {
   width: 100%;
   height: auto;
-  border: var(--hairline) solid var(--line);
-  background: var(--bg-raised);
+  border: 0;
+  border-radius: 0.75rem;
+  background: var(--bg-sunken);
 }
 .prose figure > figcaption {
   margin-top: 0.75em;

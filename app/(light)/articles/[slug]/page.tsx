@@ -75,69 +75,74 @@ export default async function ArticlePage({ params }: Props) {
       />
 
       <article className="container-k pb-[var(--section-y)] pt-28">
-        {/* 头部 */}
-        <header className="mx-auto max-w-4xl">
-          <Link
-            href="/articles"
-            className="type-label link-slide inline-flex items-center gap-1.5 text-fg-muted hover:text-fg"
-          >
-            <IconArrowRight width={12} height={12} className="rotate-180" />
-            全部文章
-          </Link>
+        {/* 一条居中阅读柱：头部 / 封面 / 正文 / 尾部 同宽同左边线。
+            目录在 ≥1440px 时浮于右侧留白（绝对定位，不影响阅读柱居中），
+            窄屏改用正文上方的折叠目录。 */}
+        <div className="relative mx-auto w-full max-w-[44rem]">
+          {/* 头部 */}
+          <header>
+            <Link
+              href="/articles"
+              className="type-label link-slide inline-flex items-center gap-1.5 text-fg-muted hover:text-fg"
+            >
+              <IconArrowRight width={12} height={12} className="rotate-180" />
+              全部文章
+            </Link>
 
-          <p className="type-label mt-10 flex flex-wrap items-baseline gap-x-4 gap-y-2 text-fg-muted">
-            <span className="border border-line px-2 py-1">{article.category}</span>
-            <time dateTime={article.date}>{formatDateTimeCompact(article.date)}</time>
-            {article.draft ? (
-              <span className="border border-line-strong bg-fg px-2 py-1 text-bg">
-                草稿 · 仅开发环境可见
-              </span>
-            ) : null}
-          </p>
+            <p className="type-label mt-10 flex flex-wrap items-baseline gap-x-4 gap-y-2 text-fg-muted">
+              <span className="rounded-full bg-bg-sunken px-3 py-1">{article.category}</span>
+              <time dateTime={article.date}>{formatDateTimeCompact(article.date)}</time>
+              {article.draft ? (
+                <span className="rounded-full bg-fg px-3 py-1 text-bg">
+                  草稿 · 仅开发环境可见
+                </span>
+              ) : null}
+            </p>
 
-          <h1 className="type-headline mt-6 text-[clamp(1.875rem,4.5vw,3.25rem)]">
-            {article.title}
-          </h1>
+            <h1 className="type-headline mt-6 text-[clamp(1.875rem,4.5vw,3rem)]">
+              {article.title}
+            </h1>
 
-          <p className="mt-6 max-w-2xl border-l-2 border-fg pl-5 text-base leading-relaxed text-fg-muted">
-            {article.summary}
-          </p>
+            <p className="mt-6 border-l-2 border-fg pl-5 text-base leading-relaxed text-fg-muted">
+              {article.summary}
+            </p>
 
-          <div className="mt-7">
-            <TagRow tags={article.tags} />
-          </div>
-        </header>
-
-        {/* 封面 */}
-        {article.cover ? (
-          <figure className="relative mx-auto mt-12 aspect-[21/9] max-w-5xl overflow-hidden border border-line">
-            <CoverImage
-              src={article.cover}
-              alt={`${article.title} 封面图`}
-              sizes="(max-width: 1024px) 100vw, 1024px"
-              priority
-            />
-          </figure>
-        ) : null}
-
-        {/* 正文 + 目录 */}
-        <div className="mx-auto mt-14 grid max-w-4xl gap-12 lg:max-w-6xl lg:grid-cols-[minmax(0,1fr)_15rem] lg:gap-20">
-          <div className="min-w-0 lg:max-w-[44rem] lg:justify-self-end lg:w-full">
-            {/* 移动端折叠目录 */}
-            <div className="mb-10 lg:hidden">
-              <Toc items={toc} variant="collapsible" />
+            <div className="mt-7">
+              <TagRow tags={article.tags} />
             </div>
+          </header>
 
-            <div className="prose">
-              <Content />
-            </div>
+          {/* 封面 —— 与阅读柱同宽，圆角无边框 */}
+          {article.cover ? (
+            <figure className="relative mt-10 aspect-[16/9] w-full overflow-hidden rounded-2xl bg-bg-sunken">
+              <CoverImage
+                src={article.cover}
+                alt={`${article.title} 封面图`}
+                sizes="(max-width: 768px) 100vw, 704px"
+                priority
+              />
+            </figure>
+          ) : null}
 
-            <ArticleFooterNav prev={prev && toListItem(prev)} next={next && toListItem(next)} related={related} />
+          {/* 折叠目录（<1440px） */}
+          <div className="mt-10 min-[1440px]:hidden">
+            <Toc items={toc} variant="collapsible" />
           </div>
 
-          {/* 桌面端悬浮目录 */}
-          <aside className="hidden lg:block">
-            <div className="sticky top-28">
+          {/* 正文 */}
+          <div className="prose mt-12">
+            <Content />
+          </div>
+
+          <ArticleFooterNav
+            prev={prev && toListItem(prev)}
+            next={next && toListItem(next)}
+            related={related}
+          />
+
+          {/* 浮动目录（≥1440px，绝对定位于阅读柱右侧留白） */}
+          <aside className="absolute left-full top-0 hidden h-full min-[1440px]:block">
+            <div className="sticky top-28 ml-12 w-52">
               <Toc items={toc} variant="sidebar" />
             </div>
           </aside>
