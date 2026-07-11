@@ -54,12 +54,12 @@ export function HomeHero({ media }: { media: ReactNode }) {
           gsap.to(".hero-stage", {
             scale: 0.965,
             yPercent: -5,
-            autoAlpha: 0.14,
+            autoAlpha: 0,
             ease: "none",
             scrollTrigger: {
               trigger: vpRef.current,
               start: "top bottom",
-              end: "top 12%",
+              end: "top 20%",
               scrub: true,
             },
           });
@@ -151,11 +151,11 @@ export function HomeHero({ media }: { media: ReactNode }) {
         </div>
       </section>
 
-      {/* 第二幕 —— 核心观点（贴覆面板） */}
+      {/* 第二幕 —— 核心观点（贴覆面板；顶部渐变边缘，柔和吃掉视频） */}
       <section
         ref={vpRef}
         aria-label="核心观点"
-        className="hairline-t relative z-10 flex min-h-[92svh] items-center bg-bg-sunken"
+        className="vp-cover relative z-10 flex min-h-[92svh] items-center"
       >
         <div className="container-k py-28">
           <p className="type-label text-fg-muted">

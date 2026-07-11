@@ -273,6 +273,17 @@ body:has([data-theme="light"].theme-scope) {
   }
 }
 
+/* ---------- 首屏核心观点贴覆过渡 ----------
+   面板顶部用透明→黑的渐变代替硬边：贴覆滑上来时视频被「慢慢吃掉」，
+   而非一整块黑瞬间盖住。渐变只作用于顶部，正文区域仍是纯黑。 */
+.vp-cover {
+  background: linear-gradient(
+    to bottom,
+    transparent 0,
+    var(--gray-0) 34vh
+  );
+}
+
 /* ---------- 阅读正文（MDX prose） ---------- */
 
 /* 公众号式长文阅读节奏：适中字号、松紧适度的行距与段距，
