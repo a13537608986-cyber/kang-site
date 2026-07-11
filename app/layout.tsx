@@ -1,9 +1,16 @@
 import type { Metadata } from "next";
-import { Archivo, IBM_Plex_Mono, Noto_Sans_SC } from "next/font/google";
+import { Archivo, IBM_Plex_Mono } from "next/font/google";
 import { siteConfig, isProduction } from "@/lib/site";
 import { Preloader } from "@/components/layout/Preloader";
 import { LenisProvider } from "@/components/motion/LenisProvider";
 import "./globals.css";
+
+/**
+ * 仅拉丁字体走 next/font/google —— 文件小、稳定。
+ * 中文不再联网加载 Noto Sans SC（其上百个 CJK 分包会拖垮构建稳定性，
+ * 且体积大拖慢访客加载），改用系统中文字体（见 globals.css 字体栈：
+ * 苹方 / 微软雅黑等），构建不再依赖 Google Fonts CDN。
+ */
 
 /** 展示与正文的西文字体：可变字重 + 宽度轴，承担巨型字标 */
 const archivo = Archivo({
@@ -19,14 +26,6 @@ const plexMono = IBM_Plex_Mono({
   weight: ["400", "500"],
   variable: "--font-plex-mono",
   display: "swap",
-});
-
-/** 中文正文（按 unicode-range 分包，浏览器只取所需子集） */
-const notoSansSC = Noto_Sans_SC({
-  subsets: ["latin"],
-  variable: "--font-noto-sc",
-  display: "swap",
-  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -80,7 +79,7 @@ export default function RootLayout({
   return (
     <html
       lang="zh-CN"
-      className={`${archivo.variable} ${plexMono.variable} ${notoSansSC.variable} h-full`}
+      className={`${archivo.variable} ${plexMono.variable} h-full`}
     >
       <head>
         {/* 直接渲染而非走 metadata.alternates：页面级 alternates（canonical）

@@ -28,11 +28,12 @@
   --gutter: clamp(1.25rem, 4vw, 4rem);
   --section-y: clamp(5rem, 12vh, 9rem);
 
-  /* 字体出口（在 layout.tsx 注入具体 next/font 变量） */
-  --font-display: var(--font-archivo), var(--font-noto-sc), "PingFang SC",
-    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  --font-body: var(--font-archivo), var(--font-noto-sc), "PingFang SC",
-    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  /* 字体出口：拉丁走 next/font（archivo/plex-mono），中文用系统字体，
+     不再联网加载 Noto Sans SC（构建稳定性 + 访客加载速度） */
+  --font-display: var(--font-archivo), "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "Source Han Sans SC", sans-serif;
+  --font-body: var(--font-archivo), "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "Source Han Sans SC", sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, "SF Mono", "PingFang SC",
     monospace;
 }
@@ -56,9 +57,9 @@
 }
 
 [data-theme="light"] {
-  --bg: var(--gray-9);
-  --bg-raised: var(--gray-10);
-  --bg-sunken: var(--gray-8);
+  --bg: #ffffff; /* 阅读主题纯白背景 */
+  --bg-raised: #ffffff; /* 卡片同为白，靠投影分层（card-float） */
+  --bg-sunken: #f1f0ea; /* 图片占位 / 胶囊 / 输入框的浅灰底 */
   --shadow-card: 0 1px 2px rgba(20, 20, 19, 0.04),
     0 8px 24px -6px rgba(20, 20, 19, 0.1),
     0 18px 40px -12px rgba(20, 20, 19, 0.08);
@@ -101,9 +102,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* 浅色路由组挂载时，让 body（含橡皮筋回弹区域）跟随浅色 */
+/* 浅色路由组挂载时，让 body（含橡皮筋回弹区域）跟随白色 */
 body:has([data-theme="light"].theme-scope) {
-  background: var(--gray-9);
+  background: #ffffff;
 }
 
 .theme-scope {

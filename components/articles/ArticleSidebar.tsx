@@ -1,24 +1,9 @@
-import fs from "node:fs";
-import path from "node:path";
-import Image from "next/image";
 import Link from "next/link";
 import { profile } from "@/lib/profile";
 import type { ArticleListItem } from "@/lib/content/articles";
 import { FeaturedCarousel } from "@/components/articles/FeaturedCarousel";
+import { Avatar } from "@/components/ui/Avatar";
 import { IconArrowRight } from "@/components/ui/icons";
-
-/**
- * 头像：构建时检测 public/images/portrait.{jpg,png,webp} 是否存在，
- * 存在则显示真人照片（圆框内），否则回退为「康」字圆标。
- * 放入照片文件即自动启用，无需改代码。
- */
-function resolvePortrait(): string | null {
-  for (const ext of ["jpg", "jpeg", "png", "webp"]) {
-    const rel = `/images/portrait.${ext}`;
-    if (fs.existsSync(path.join(process.cwd(), "public", rel))) return rel;
-  }
-  return null;
-}
 
 /**
  * 文章列表页右侧栏：关于卡 + 精选文章轮播 + 工作经验卡 + 常用工具卡。
@@ -26,7 +11,6 @@ function resolvePortrait(): string | null {
  * 桌面端整列 sticky 悬浮；窄屏时随文档流落到列表下方。
  */
 export function ArticleSidebar({ featured }: { featured: ArticleListItem[] }) {
-  const portrait = resolvePortrait();
   return (
     <aside className="space-y-8" aria-label="侧栏">
       {/* 关于卡 */}
@@ -36,22 +20,7 @@ export function ArticleSidebar({ featured }: { featured: ArticleListItem[] }) {
         </h2>
 
         <div className="mt-5 flex items-center gap-4">
-          {portrait ? (
-            <Image
-              src={portrait}
-              alt={`${profile.name}的照片`}
-              width={56}
-              height={56}
-              className="h-14 w-14 shrink-0 rounded-full object-cover"
-            />
-          ) : (
-            <span
-              aria-hidden="true"
-              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-fg text-xl font-bold text-bg"
-            >
-              康
-            </span>
-          )}
+          <Avatar size={56} />
           <div className="min-w-0">
             <p className="text-base font-semibold">{profile.name}</p>
             <p className="type-label mt-1 text-fg-muted">正在进化的 AI 产品经理</p>

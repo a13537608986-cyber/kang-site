@@ -4,10 +4,13 @@ import { notFound } from "next/navigation";
 import { ReadingProgress } from "@/components/articles/ReadingProgress";
 import { Toc } from "@/components/articles/Toc";
 import { ArticleFooterNav } from "@/components/articles/ArticleFooterNav";
+import { AuthorCard } from "@/components/articles/AuthorCard";
 import { CoverImage } from "@/components/ui/CoverImage";
+import { Avatar } from "@/components/ui/Avatar";
 import { TagRow } from "@/components/ui/Tag";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { IconArrowRight } from "@/components/ui/icons";
+import { profile } from "@/lib/profile";
 import {
   getAdjacentArticles,
   getAllArticles,
@@ -103,6 +106,17 @@ export default async function ArticlePage({ params }: Props) {
               {article.title}
             </h1>
 
+            {/* 作者署名行（公众号式） */}
+            <div className="mt-6 flex items-center gap-3">
+              <Avatar size={40} />
+              <div>
+                <p className="text-sm font-semibold">{profile.name}</p>
+                <p className="type-label mt-0.5 text-fg-muted">
+                  正在进化的 AI 产品经理
+                </p>
+              </div>
+            </div>
+
             <p className="mt-6 border-l-2 border-fg pl-5 text-base leading-relaxed text-fg-muted">
               {article.summary}
             </p>
@@ -133,6 +147,9 @@ export default async function ArticlePage({ params }: Props) {
           <div className="prose mt-12">
             <Content />
           </div>
+
+          {/* 文末作者卡 */}
+          <AuthorCard />
 
           <ArticleFooterNav
             prev={prev && toListItem(prev)}
