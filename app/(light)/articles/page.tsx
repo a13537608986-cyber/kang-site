@@ -46,12 +46,10 @@ export default function ArticlesPage() {
         </a>
       </header>
 
-      {/* 左：分类导航 + 文章列表；右：个人卡与精选（桌面 sticky，窄屏落到列表下方） */}
+      {/* 左：分类导航 + 文章列表；右：个人卡、精选、经验、工具（窄屏落到列表下方） */}
       <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-16">
         <ArticleExplorer articles={all} />
-        <div className="lg:sticky lg:top-28 lg:self-start">
-          <ArticleSidebar featured={featured} />
-        </div>
+        <ArticleSidebar featured={featured} />
       </div>
     </div>
   );

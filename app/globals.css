@@ -43,6 +43,8 @@
   --bg: var(--gray-1);
   --bg-raised: var(--gray-2);
   --bg-sunken: var(--gray-0);
+  --shadow-card: 0 8px 24px -6px rgba(0, 0, 0, 0.5),
+    0 18px 40px -12px rgba(0, 0, 0, 0.4);
   --fg: var(--gray-9);
   --fg-muted: var(--gray-6);
   --fg-faint: var(--gray-5);
@@ -57,6 +59,9 @@
   --bg: var(--gray-9);
   --bg-raised: var(--gray-10);
   --bg-sunken: var(--gray-8);
+  --shadow-card: 0 1px 2px rgba(20, 20, 19, 0.04),
+    0 8px 24px -6px rgba(20, 20, 19, 0.1),
+    0 18px 40px -12px rgba(20, 20, 19, 0.08);
   --fg: var(--gray-1);
   --fg-muted: var(--gray-5);
   --fg-faint: var(--gray-6);
@@ -153,6 +158,13 @@ body:has([data-theme="light"].theme-scope) {
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+}
+
+/* 悬浮卡片：投影替代线框（浅色阅读域的名片 / 侧栏卡片） */
+.card-float {
+  background: var(--bg-raised);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-card);
 }
 
 .hairline-t {
