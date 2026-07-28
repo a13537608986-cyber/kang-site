@@ -497,6 +497,64 @@ body:has([data-theme="light"].theme-scope) {
 }
 
 /* 空心描边大字（年份标题等承载信息的场景用 fg-muted 保证可读） */
+/* ---------- 深色页面纹理系统 ----------
+   给纯黑背景加结构感：极淡的垂直网格线 + 章节刻度 + 编号衬字。
+   全部为发丝级低透明度，不抢内容。 */
+
+/* 垂直网格线：四列基准线贯穿整个深色区域 */
+.grid-lines {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.grid-lines::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    to right,
+    transparent,
+    transparent calc(25% - 1px),
+    color-mix(in srgb, var(--fg) 6%, transparent) calc(25% - 1px),
+    color-mix(in srgb, var(--fg) 6%, transparent) 25%
+  );
+}
+
+/* 章节刻度：标题左侧的短竖线组，做编号系统的视觉延伸 */
+.section-ticks {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.section-ticks > span {
+  display: block;
+  width: 1px;
+  background: var(--fg-faint);
+}
+.section-ticks > span:nth-child(1) { height: 14px; }
+.section-ticks > span:nth-child(2) { height: 8px; }
+.section-ticks > span:nth-child(3) { height: 8px; }
+.section-ticks > span:nth-child(4) { height: 5px; }
+
+/* 巨型编号衬字：章节编号放大置于背景，低透明度 */
+.section-numeral {
+  position: absolute;
+  right: 0;
+  top: -0.32em;
+  z-index: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(7rem, 16vw, 15rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--fg) 8%, transparent);
+  pointer-events: none;
+  user-select: none;
+}
+
 .type-outline {
   color: transparent;
   -webkit-text-stroke: 1px var(--fg-muted);

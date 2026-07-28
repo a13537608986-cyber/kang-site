@@ -5,9 +5,11 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 /** 深色主题作用域：首页与项目页 */
 export default function DarkLayout({ children }: { children: ReactNode }) {
   return (
-    <div data-theme="dark" className="theme-scope">
+    <div data-theme="dark" className="theme-scope relative">
+      {/* 垂直基准网格线：给纯黑背景一层极淡的结构纹理 */}
+      <div className="grid-lines" aria-hidden="true" />
       <SiteHeader />
-      <main id="main" className="flex-1">
+      <main id="main" className="relative z-10 flex-1">
         {children}
       </main>
       <SiteFooter />

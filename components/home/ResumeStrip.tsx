@@ -5,7 +5,7 @@ import { profile } from "@/lib/profile";
 /** 04 — 履历摘要：只列时间段与角色，完整经历在关于页 */
 export function ResumeStrip() {
   return (
-    <section aria-labelledby="resume-title" className="container-k py-[var(--section-y)]">
+    <section aria-labelledby="resume-title" className="container-k pb-[calc(var(--section-y)*0.65)] pt-[calc(var(--section-y)*0.8)]">
       <div id="resume-title">
         <SectionHead
           index="04"

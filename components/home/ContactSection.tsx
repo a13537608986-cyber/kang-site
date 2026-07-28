@@ -5,7 +5,7 @@ import { profile } from "@/lib/profile";
 /** 05 — 联系方式：邮箱即巨型入口 */
 export function ContactSection() {
   return (
-    <section aria-labelledby="contact-title" className="container-k py-[var(--section-y)]">
+    <section aria-labelledby="contact-title" className="container-k pb-[calc(var(--section-y)*0.6)] pt-[calc(var(--section-y)*1.1)]">
       <div id="contact-title">
         <SectionHead index="05" en="CONTACT" zh="保持联系" />
       </div>

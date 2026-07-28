@@ -5,7 +5,7 @@ import { profile } from "@/lib/profile";
 /** 01 — 专业能力与思考框架 */
 export function CapabilityGrid() {
   return (
-    <section aria-labelledby="capabilities-title" className="container-k py-[var(--section-y)]">
+    <section aria-labelledby="capabilities-title" className="container-k pb-[calc(var(--section-y)*0.7)] pt-[calc(var(--section-y)*0.85)]">
       <div id="capabilities-title">
         <SectionHead index="01" en="PRACTICE" zh="我在琢磨的四件事" />
       </div>

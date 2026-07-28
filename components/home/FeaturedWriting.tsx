@@ -8,7 +8,7 @@ import { formatDateCompact } from "@/lib/dates";
 export function FeaturedWriting({ articles }: { articles: ArticleListItem[] }) {
   if (articles.length === 0) return null;
   return (
-    <section aria-labelledby="featured-writing-title" className="container-k py-[var(--section-y)]">
+    <section aria-labelledby="featured-writing-title" className="container-k pb-[calc(var(--section-y)*1.05)] pt-[calc(var(--section-y)*1.1)]">
       <div id="featured-writing-title">
         <SectionHead
           index="03"

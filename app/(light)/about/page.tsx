@@ -53,7 +53,7 @@ export default function AboutPage() {
       {/* 职业经历 */}
       <section aria-labelledby="experience-title" className="container-k mt-[var(--section-y)]">
         <div id="experience-title">
-          <SectionHead index="01" en="EXPERIENCE" zh="职业经历" />
+          <SectionHead index="01" en="EXPERIENCE" zh="职业经历" numeral={false} />
         </div>
         <ol className="mt-12">
           {profile.experience.map((item, i) => (
@@ -74,7 +74,7 @@ export default function AboutPage() {
       {/* 核心能力 */}
       <section aria-labelledby="ability-title" className="container-k mt-[var(--section-y)]">
         <div id="ability-title">
-          <SectionHead index="02" en="CAPABILITIES" zh="我在琢磨的四件事" />
+          <SectionHead index="02" en="CAPABILITIES" zh="我在琢磨的四件事" numeral={false} />
         </div>
         <ul className="mt-12 grid gap-px border border-line bg-line md:grid-cols-2">
           {profile.capabilities.map((cap, i) => (
@@ -94,7 +94,7 @@ export default function AboutPage() {
       {/* 产品方法与工作方式 */}
       <section aria-labelledby="method-title" className="container-k mt-[var(--section-y)]">
         <div id="method-title">
-          <SectionHead index="03" en="METHOD" zh="我信的几条" />
+          <SectionHead index="03" en="METHOD" zh="我信的几条" numeral={false} />
         </div>
         <ol className="mt-12">
           {profile.principles.map((p, i) => (
@@ -117,7 +117,7 @@ export default function AboutPage() {
       {/* 常用工具 */}
       <section aria-labelledby="tools-title" className="container-k mt-[var(--section-y)]">
         <div id="tools-title">
-          <SectionHead index="04" en="TOOLKIT" zh="常用工具" />
+          <SectionHead index="04" en="TOOLKIT" zh="常用工具" numeral={false} />
         </div>
         <div className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {profile.tools.map((group, i) => (

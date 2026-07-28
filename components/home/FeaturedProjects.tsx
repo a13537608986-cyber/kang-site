@@ -10,7 +10,7 @@ import { yearOf } from "@/lib/dates";
 export function FeaturedProjects({ projects }: { projects: ProjectListItem[] }) {
   if (projects.length === 0) return null;
   return (
-    <section aria-labelledby="featured-projects-title" className="container-k py-[var(--section-y)]">
+    <section aria-labelledby="featured-projects-title" className="container-k pb-[calc(var(--section-y)*1.15)] pt-[calc(var(--section-y)*1.3)]">
       <div id="featured-projects-title">
         <SectionHead
           index="02"
