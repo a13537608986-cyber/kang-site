@@ -12,7 +12,7 @@ export function ContactSection() {
 
       <Reveal className="mt-12">
         <p className="max-w-xl text-sm leading-relaxed text-fg-muted">
-          聊 AI、聊产品、聊合作，或者只是分享一个会心一笑的瞬间——都欢迎邮件。
+          聊 AI、聊产品、聊合作，或者纯粹想抬个杠——都欢迎邮件。
         </p>
         <a
           href={`mailto:${profile.contact.email}`}

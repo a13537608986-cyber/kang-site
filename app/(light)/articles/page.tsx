@@ -34,7 +34,7 @@ export default function ArticlesPage() {
       <header className="mb-14 text-center">
         <h1 className="type-mega text-[clamp(3.5rem,10vw,8rem)]">Writing</h1>
         <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-fg-muted">
-          这里没有功利的说教，只有不加滤镜的踩坑复盘与实操经验。
+          不写正确的废话，只记不加滤镜的踩坑复盘。
           保持记录，是为了在浪潮里不掉队。
         </p>
         <a

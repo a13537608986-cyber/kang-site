@@ -10,7 +10,7 @@ export function ResumeStrip() {
         <SectionHead
           index="04"
           en="BACKGROUND"
-          zh="履历摘要"
+          zh="这些年在哪儿"
           more={{ href: "/about", label: "完整介绍" }}
         />
       </div>

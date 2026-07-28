@@ -27,8 +27,8 @@ export default function ProjectsPage() {
       <header className="mb-14">
         <h1 className="type-mega text-[clamp(3.5rem,10vw,9rem)]">Work</h1>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-fg-muted">
-          项目 · 想法要落到产品上才算数。这里是可体验的产品和不加滤镜的案例复盘，
-          当前条目均为 DEMO 占位，用于演示信息结构。
+          想法要落到产品上才算数。这里放可以直接体验的东西，
+          和那些做完之后才想明白的复盘。
         </p>
       </header>
 

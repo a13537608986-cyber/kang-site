@@ -74,7 +74,7 @@ export default function AboutPage() {
       {/* 核心能力 */}
       <section aria-labelledby="ability-title" className="container-k mt-[var(--section-y)]">
         <div id="ability-title">
-          <SectionHead index="02" en="CAPABILITIES" zh="核心能力" />
+          <SectionHead index="02" en="CAPABILITIES" zh="我在琢磨的四件事" />
         </div>
         <ul className="mt-12 grid gap-px border border-line bg-line md:grid-cols-2">
           {profile.capabilities.map((cap, i) => (
@@ -94,7 +94,7 @@ export default function AboutPage() {
       {/* 产品方法与工作方式 */}
       <section aria-labelledby="method-title" className="container-k mt-[var(--section-y)]">
         <div id="method-title">
-          <SectionHead index="03" en="METHOD" zh="产品方法与工作方式" />
+          <SectionHead index="03" en="METHOD" zh="我信的几条" />
         </div>
         <ol className="mt-12">
           {profile.principles.map((p, i) => (

@@ -7,7 +7,7 @@ export function CapabilityGrid() {
   return (
     <section aria-labelledby="capabilities-title" className="container-k py-[var(--section-y)]">
       <div id="capabilities-title">
-        <SectionHead index="01" en="PRACTICE" zh="专业能力与思考框架" />
+        <SectionHead index="01" en="PRACTICE" zh="我在琢磨的四件事" />
       </div>
 
       <ul className="mt-12 grid gap-px bg-line max-md:grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
