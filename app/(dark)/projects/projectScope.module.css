@@ -1,0 +1,8 @@
+.scope {
+  display: contents;
+}
+
+/* Cover the entire projects route, including every project detail page. */
+:global(.theme-scope):has(.scope) > :global(.grid-lines) {
+  display: none;
+}
