@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import styles from "./detail.module.css";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CoverImage } from "@/components/ui/CoverImage";
@@ -53,7 +54,7 @@ export default async function ProjectPage({ params }: Props) {
   const typeLabel = PROJECT_TYPE_LABEL[project.type];
 
   return (
-    <article className="container-k pb-[var(--section-y)] pt-28">
+    <article className={`container-k pb-[var(--section-y)] pt-28 ${styles.detail}`}>
       <JsonLd data={projectJsonLd(project)} />
       <JsonLd
         data={breadcrumbJsonLd([
