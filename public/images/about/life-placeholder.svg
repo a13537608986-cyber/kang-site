@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="816" height="1100" viewBox="0 0 816 1100">
+  <rect width="816" height="1100" fill="#f2f2f2"/>
+  <g fill="none" stroke="#bdbdbd" stroke-width="3">
+    <rect x="332" y="356" width="152" height="120" rx="10"/>
+    <circle cx="374" cy="393" r="12"/>
+    <path d="M346 458l42-42 30 29 24-25 28 38"/>
+  </g>
+  <text x="408" y="530" fill="#888" text-anchor="middle" font-family="PingFang SC, sans-serif" font-size="26">真实照片待补充</text>
+</svg>

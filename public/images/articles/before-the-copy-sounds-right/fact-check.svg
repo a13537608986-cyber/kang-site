@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="760" viewBox="0 0 1440 760" role="img" aria-labelledby="title desc">
+  <title id="title">先确认资料，再写文案</title>
+  <desc id="desc">虚构杯子的说明示意。已知容量 350 毫升、材质不锈钢、颜色银色；保温时长与洗碗机适用性未提供，不能写成确定卖点。</desc>
+  <rect width="1440" height="760" rx="24" fill="#f3f2ee"/>
+  <g font-family="PingFang SC, Microsoft YaHei, sans-serif" fill="#222">
+    <text x="76" y="86" font-size="20" letter-spacing="3">写作示意 · 虚构商品</text>
+    <text x="76" y="151" font-size="42" font-weight="600">有些空白，先别替它补上。</text>
+    <rect x="76" y="205" width="585" height="380" rx="18" fill="#fff"/>
+    <rect x="697" y="205" width="667" height="380" rx="18" fill="#fff"/>
+    <text x="110" y="265" font-size="26" font-weight="600">资料里已经有的</text>
+    <path d="M110 290H627" stroke="#ddd"/>
+    <text x="110" y="347" font-size="25">容量</text><text x="570" y="347" text-anchor="end" font-size="25">350 mL</text>
+    <text x="110" y="417" font-size="25">材质</text><text x="570" y="417" text-anchor="end" font-size="25">不锈钢</text>
+    <text x="110" y="487" font-size="25">颜色</text><text x="570" y="487" text-anchor="end" font-size="25">银色</text>
+    <text x="731" y="265" font-size="26" font-weight="600">资料里还没有的</text>
+    <path d="M731 290H1330" stroke="#ddd"/>
+    <text x="731" y="347" font-size="25">保温时长</text><text x="1288" y="347" text-anchor="end" font-size="25" fill="#777">待确认</text>
+    <text x="731" y="417" font-size="25">是否适用洗碗机</text><text x="1288" y="417" text-anchor="end" font-size="25" fill="#777">待确认</text>
+    <text x="731" y="509" font-size="22" fill="#666">句子可以改顺，缺少的事实不能猜。</text>
+    <text x="76" y="653" font-size="26">可以写：350 mL 银色不锈钢杯。</text>
+    <text x="76" y="707" font-size="20" fill="#777">不代表真实商品参数、Smart Photo 界面或历史测试结果。</text>
+  </g>
+</svg>
