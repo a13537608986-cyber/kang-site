@@ -56,7 +56,7 @@ export function ProjectGrid({ projects }: { projects: ProjectListItem[] }) {
         {filtered.length} 个项目 · 按时间排列
       </p>
 
-      <ul className="mt-6 grid gap-10 md:grid-cols-2">
+      <ul className="mt-6 grid grid-cols-1 gap-10 md:grid-cols-2">
         {filtered.map((project, i) => (
           <ProjectCard key={project.slug} project={project} index={i} />
         ))}
