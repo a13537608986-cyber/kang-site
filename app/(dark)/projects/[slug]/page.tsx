@@ -102,7 +102,7 @@ export default async function ProjectPage({ params }: Props) {
                 rel="noopener noreferrer"
                 className="type-label inline-flex items-center gap-2 border border-fg bg-fg px-4 py-3 text-bg transition-colors hover:bg-transparent hover:text-fg"
               >
-                {project.slug === "zhijian" ? "去用一下" : "在线体验（占位链接）"}
+                {["zhijian", "product-doc-assistant"].includes(project.slug) ? "去用一下" : "在线体验（占位链接）"}
                 <IconArrowUpRight width={12} height={12} />
               </a>
             ) : null}
