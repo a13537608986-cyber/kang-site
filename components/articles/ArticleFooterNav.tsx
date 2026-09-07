@@ -1,99 +1,67 @@
 import Link from "next/link";
 import type { ArticleListItem } from "@/lib/content/articles";
 import { formatDateCompact } from "@/lib/dates";
-import { IconArrowRight } from "@/components/ui/icons";
+import { CoverImage } from "@/components/ui/CoverImage";
 
-/** 文章尾部：上一篇 / 下一篇 + 相关文章 */
+/** 文章尾部：按 Revision 的 Read Next 版式呈现三篇延伸阅读 */
 export function ArticleFooterNav({
-  prev,
-  next,
   related,
 }: {
-  prev?: ArticleListItem;
-  next?: ArticleListItem;
   related: ArticleListItem[];
 }) {
   return (
-    <footer className="mt-20">
-      {/* 上一篇 / 下一篇 */}
-      <nav aria-label="相邻文章" className="grid border-y border-line sm:grid-cols-2">
-        <PagerCell article={prev} dir="prev" />
-        <PagerCell article={next} dir="next" />
-      </nav>
+    <footer className="container-k mt-28 mb-[120px] w-full sm:mt-36 [font-family:var(--font-dm-sans),var(--font-archivo),sans-serif]">
+      <div className="mx-auto w-full max-w-[74rem]">
+        <h2 className="mb-6 text-[24px] font-bold leading-[28.8px] tracking-[-0.96px] text-fg md:mb-8 md:text-[33px] md:leading-[39.6px] md:tracking-[-1.32px]">
+          Read Next
+        </h2>
 
-      {/* 相关文章 */}
-      {related.length > 0 ? (
-        <section aria-labelledby="related-title" className="mt-16">
-          <h2 id="related-title" className="type-label text-fg-muted">
-            RELATED / 相关文章
-          </h2>
-          <ul className="mt-6 grid gap-px border border-line bg-line md:grid-cols-3">
-            {related.map((article) => (
-              <li key={article.slug} className="bg-bg-raised">
-                <Link
-                  href={`/articles/${article.slug}`}
-                  className="flex h-full flex-col p-5 transition-colors hover:bg-bg-sunken"
-                >
-                  <span className="flex items-baseline justify-between gap-3">
-                    <span className="type-label text-fg-muted">{article.category}</span>
-                    <time dateTime={article.date} className="type-label text-fg-muted">
-                      {formatDateCompact(article.date)}
-                    </time>
-                  </span>
-                  <span className="link-slide mt-3 self-start text-base font-medium leading-snug">
-                    {article.title}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-    </footer>
-  );
-}
+        <ul className="grid gap-x-6 gap-y-10 lg:grid-cols-3 lg:gap-y-12">
+        {related.slice(0, 3).map((article) => {
+          const tags = article.tags.filter((tag) => tag !== "DEMO").slice(0, 2);
 
-function PagerCell({
-  article,
-  dir,
-}: {
-  article?: ArticleListItem;
-  dir: "prev" | "next";
-}) {
-  const label = dir === "prev" ? "上一篇 · OLDER" : "下一篇 · NEWER";
-  if (!article) {
-    return (
-      <div
-        className={`p-6 max-sm:border-b max-sm:border-line sm:first:border-r sm:first:border-line ${
-          dir === "next" ? "text-right" : ""
-        }`}
-      >
-        <p className="type-label text-fg-muted">{label}</p>
-        <p className="mt-3 text-sm text-fg-muted">已经到头了</p>
+          return (
+            <li key={article.slug}>
+              <Link href={`/articles/${article.slug}`} className="group block">
+                <div className="relative aspect-video overflow-hidden rounded-2xl bg-bg-sunken">
+                  {article.cover ? (
+                    <CoverImage
+                      src={article.cover}
+                      alt={`${article.title} 封面图`}
+                      sizes="(max-width: 1024px) 100vw, 33vw"
+                      className="transition-transform duration-500 group-hover:scale-[1.025]"
+                    />
+                  ) : null}
+
+                  <div className="absolute left-5 top-5 flex flex-wrap gap-2.5">
+                    {(tags.length > 0 ? tags : [article.category]).map((tag) => (
+                      <span
+                        key={tag}
+                        className="flex h-[33.2px] items-center rounded-md bg-white px-[11px] text-[11px] font-extrabold leading-[13.2px] tracking-[1.1px] text-black"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <p className="mt-5 flex flex-wrap items-baseline gap-x-1.5 text-[15px] font-semibold leading-[18px] tracking-[-0.3px] text-fg-muted">
+                  <time dateTime={article.date}>{formatDateCompact(article.date)}</time>
+                </p>
+
+                <h3 className="mt-2.5 line-clamp-2 min-h-[50.4px] text-[21px] font-bold leading-[25.2px] tracking-[-0.84px] text-fg">
+                  {article.title}
+                </h3>
+
+                <p className="mt-[22px] line-clamp-3 min-h-[74.4px] text-[16px] font-normal leading-[24.8px] text-fg-muted">
+                  {article.summary}
+                </p>
+              </Link>
+            </li>
+          );
+        })}
+        </ul>
       </div>
-    );
-  }
-  return (
-    <Link
-      href={`/articles/${article.slug}`}
-      className={`group p-6 transition-colors hover:bg-bg-raised max-sm:border-b max-sm:border-line sm:first:border-r sm:first:border-line ${
-        dir === "next" ? "text-right" : ""
-      }`}
-    >
-      <p
-        className={`type-label flex items-center gap-2 text-fg-muted ${
-          dir === "next" ? "justify-end" : ""
-        }`}
-      >
-        {dir === "prev" ? (
-          <IconArrowRight width={12} height={12} className="rotate-180" />
-        ) : null}
-        {label}
-        {dir === "next" ? <IconArrowRight width={12} height={12} /> : null}
-      </p>
-      <p className="link-slide mt-3 inline-block text-base font-medium leading-snug">
-        {article.title}
-      </p>
-    </Link>
+    </footer>
   );
 }

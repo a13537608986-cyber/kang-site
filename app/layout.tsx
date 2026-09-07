@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Archivo, IBM_Plex_Mono } from "next/font/google";
+import { Archivo, DM_Sans, IBM_Plex_Mono } from "next/font/google";
 import { siteConfig, isProduction } from "@/lib/site";
 import { Preloader } from "@/components/layout/Preloader";
 import { LenisProvider } from "@/components/motion/LenisProvider";
@@ -25,6 +25,13 @@ const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
   variable: "--font-plex-mono",
+  display: "swap",
+});
+
+/** Revision 文章卡片使用的西文字体，仅在对应组件内引用变量。 */
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
   display: "swap",
 });
 
@@ -79,17 +86,9 @@ export default function RootLayout({
   return (
     <html
       lang="zh-CN"
-      className={`${archivo.variable} ${plexMono.variable} h-full`}
+      className={`${archivo.variable} ${plexMono.variable} ${dmSans.variable} h-full`}
     >
       <head>
-        {/* 直接渲染而非走 metadata.alternates：页面级 alternates（canonical）
-            会整体覆盖根布局的嵌套字段，导致 RSS 自动发现丢失 */}
-        <link
-          rel="alternate"
-          type="application/rss+xml"
-          title={`${siteConfig.brand} — RSS`}
-          href="/rss.xml"
-        />
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
       </head>
       <body className="min-h-full">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type MouseEvent } from "react";
+import { useEffect, useMemo, useState, type MouseEvent } from "react";
 import type { TocItem } from "@/lib/toc";
 
 /**
@@ -30,9 +30,10 @@ export function Toc({
 
 function SidebarToc({ items }: { items: TocItem[] }) {
   const [activeId, setActiveId] = useState<string | null>(null);
+  const chapters = useMemo(() => items.filter((item) => item.depth === 2), [items]);
 
   useEffect(() => {
-    const headings = items
+    const headings = chapters
       .map((item) => document.getElementById(item.id))
       .filter((el): el is HTMLElement => el !== null);
     if (headings.length === 0) return;
@@ -49,12 +50,11 @@ function SidebarToc({ items }: { items: TocItem[] }) {
     );
     headings.forEach((h) => io.observe(h));
     return () => io.disconnect();
-  }, [items]);
+  }, [chapters]);
 
   return (
-    <nav aria-label="目录" className="text-sm">
-      <p className="type-label mb-5 text-fg-muted">目录 / CONTENTS</p>
-      <TocList items={items} activeId={activeId} />
+    <nav aria-label="文章章节" className="text-sm">
+      <TocList items={chapters} activeId={activeId} numbered />
     </nav>
   );
 }
@@ -63,10 +63,12 @@ function TocList({
   items,
   activeId,
   className = "",
+  numbered = false,
 }: {
   items: TocItem[];
   activeId: string | null;
   className?: string;
+  numbered?: boolean;
 }) {
   const onClick = (e: MouseEvent<HTMLAnchorElement>, id: string) => {
     const el = document.getElementById(id);
@@ -84,7 +86,7 @@ function TocList({
 
   return (
     <ol className={`space-y-2.5 ${className}`}>
-      {items.map((item) => {
+      {items.map((item, index) => {
         const active = item.id === activeId;
         return (
           <li key={item.id} className={item.depth === 3 ? "pl-4" : ""}>
@@ -92,13 +94,16 @@ function TocList({
               href={`#${item.id}`}
               onClick={(e) => onClick(e, item.id)}
               aria-current={active ? "true" : undefined}
-              className={`block border-l-2 pl-3 leading-snug transition-colors ${
-                active
-                  ? "border-fg text-fg"
-                  : "border-transparent text-fg-muted hover:text-fg"
-              }`}
+              className={`leading-snug transition-colors ${
+                numbered ? "grid grid-cols-[1.5rem_1fr] gap-2" : "block border-l-2 pl-3"
+              } ${active ? "border-fg text-fg" : "border-transparent text-fg-muted hover:text-fg"}`}
             >
-              {item.text}
+              {numbered ? (
+                <span className="type-label text-fg-faint" aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+              ) : null}
+              <span>{item.text}</span>
             </a>
           </li>
         );

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { ArticleExplorer } from "@/components/articles/ArticleExplorer";
 import { ArticleSidebar } from "@/components/articles/ArticleSidebar";
 import { JsonLd } from "@/components/ui/JsonLd";
-import { IconRss } from "@/components/ui/icons";
 import {
   getAllArticles,
   getFeaturedArticles,
@@ -13,7 +12,7 @@ import { breadcrumbJsonLd, ogBase } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "文章",
   description:
-    "李康的文章档案：AIGC 实战、商业自动化与产品思考，不加滤镜的踩坑复盘，按年份与栏目归档。",
+    "李康的文章档案：AI 产品落地、商业自动化，还有那些踩过的坑。不加滤镜，按年份与栏目归档。",
   alternates: { canonical: "/articles" },
   openGraph: { ...ogBase, type: "website", url: "/articles", title: "文章" },
 };
@@ -23,7 +22,7 @@ export default function ArticlesPage() {
   const featured = getFeaturedArticles(3).map(toListItem);
 
   return (
-    <div className="container-k max-w-7xl pb-[var(--section-y)] pt-32">
+    <div className="bg-bg px-6 pb-[var(--section-y)] pt-[88px] [font-family:var(--font-dm-sans),var(--font-archivo),sans-serif]">
       <JsonLd
         data={breadcrumbJsonLd([
           { name: "首页", path: "/" },
@@ -31,25 +30,21 @@ export default function ArticlesPage() {
         ])}
       />
 
-      <header className="mb-14 text-center">
-        <h1 className="type-mega text-[clamp(3.5rem,10vw,8rem)]">Writing</h1>
-        <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-fg-muted">
-          不写正确的废话，只记不加滤镜的踩坑复盘。
-          保持记录，是为了在浪潮里不掉队。
+      <header className="mx-auto flex min-h-[319.6px] max-w-[1232px] flex-col items-center pt-8 text-center md:pt-16">
+        <h1 className="max-w-[920px] text-[42px] font-bold leading-[50.4px] tracking-[-2.1px] text-fg md:text-[52px] md:leading-[62.4px] md:tracking-[-2.6px]">
+    写下我正在想的事
+        </h1>
+        <p className="mx-auto mt-2.5 max-w-[640px] text-[18px] leading-[27.9px] text-fg-muted">
+    有 AI、产品和做过的项目，也有一些与工作无关的念头。它们未必都有答案，
+    但我想先把它们留下来。
         </p>
-        <a
-          href="/rss.xml"
-          className="type-label link-slide mt-5 inline-flex items-center gap-1.5 text-fg-muted hover:text-fg"
-        >
-          RSS 订阅
-          <IconRss width={12} height={12} />
-        </a>
       </header>
 
-      {/* 左：分类导航 + 文章列表；右：个人卡、精选、经验、工具（窄屏落到列表下方） */}
-      <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-16">
-        <ArticleExplorer articles={all} />
-        <ArticleSidebar featured={featured} />
+      <div className="mx-auto max-w-[1232px]">
+        <ArticleExplorer
+          articles={all}
+          sidebar={<ArticleSidebar featured={featured} />}
+        />
       </div>
     </div>
   );

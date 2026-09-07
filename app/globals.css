@@ -299,7 +299,8 @@ body:has([data-theme="light"].theme-scope) {
   margin-top: 1.25em;
 }
 .prose h2,
-.prose h3 {
+.prose h3,
+.prose h4 {
   font-family: var(--font-display);
   font-weight: 700;
   line-height: 1.35;
@@ -314,8 +315,13 @@ body:has([data-theme="light"].theme-scope) {
   font-size: 1.125rem;
   margin-top: 1.75em;
 }
+.prose h4 {
+  font-size: 1.0625rem;
+  margin-top: 1.5em;
+}
 .prose h2 > a,
-.prose h3 > a {
+.prose h3 > a,
+.prose h4 > a {
   text-decoration: none;
   color: inherit;
 }
@@ -335,22 +341,20 @@ body:has([data-theme="light"].theme-scope) {
 }
 .prose ul,
 .prose ol {
-  padding-left: 1.4em;
+  padding-left: 1.3em;
 }
 .prose ul {
-  list-style: none;
+  list-style: disc;
 }
-.prose ul > li {
-  position: relative;
+.prose ul ul {
+  list-style: circle;
 }
-.prose ul > li::before {
-  content: "";
-  position: absolute;
-  left: -1.25em;
-  top: 0.9em;
-  width: 0.5em;
-  height: 1px;
-  background: var(--fg-muted);
+.prose ul ul ul {
+  list-style: square;
+}
+.prose ul > li::marker {
+  color: var(--fg-faint);
+  font-size: 0.72em;
 }
 .prose ol {
   list-style: decimal;
@@ -360,8 +364,19 @@ body:has([data-theme="light"].theme-scope) {
   font-size: 0.85em;
   color: var(--fg-muted);
 }
+.prose li {
+  padding-left: 0.2em;
+}
 .prose li + li {
-  margin-top: 0.5em;
+  margin-top: 0.65em;
+}
+.prose li > ul,
+.prose li > ol {
+  margin-block: 0.65em 0.25em;
+  padding-left: 1.2em;
+}
+.prose li > p {
+  margin-block: 0.35em;
 }
 .prose blockquote {
   border-left: 2px solid var(--fg);
@@ -520,6 +535,16 @@ body:has([data-theme="light"].theme-scope) {
     color-mix(in srgb, var(--fg) 6%, transparent) calc(25% - 1px),
     color-mix(in srgb, var(--fg) 6%, transparent) 25%
   );
+}
+
+/* 首页以排版和留白组织内容，不叠加贯穿全页的工程网格。 */
+.theme-scope:has(.home-page) > .grid-lines {
+  display: none;
+}
+
+/* 首页页脚只保留进入页脚的一条分隔线。 */
+.theme-scope:has(.home-page) footer > .hairline-t {
+  border-top: 0;
 }
 
 /* 章节刻度：标题左侧的短竖线组，做编号系统的视觉延伸 */

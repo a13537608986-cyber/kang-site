@@ -2,46 +2,55 @@ import { Reveal } from "@/components/motion/Reveal";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { profile } from "@/lib/profile";
 
-/** 05 — 联系方式：邮箱即巨型入口 */
+/** 05 — 网站尾声：以持续记录收束首页，联系方式退回落款层级 */
 export function ContactSection() {
   return (
-    <section aria-labelledby="contact-title" className="container-k pb-[calc(var(--section-y)*0.6)] pt-[calc(var(--section-y)*1.1)]">
-      <div id="contact-title">
-        <SectionHead index="05" en="CONTACT" zh="保持联系" />
-      </div>
-
-      <Reveal className="mt-12">
-        <p className="max-w-xl text-sm leading-relaxed text-fg-muted">
-          聊 AI、聊产品、聊合作，或者纯粹想抬个杠——都欢迎邮件。
-        </p>
-        <a
-          href={`mailto:${profile.contact.email}`}
-          className="group mt-8 inline-block max-w-full"
-        >
-          <span className="type-mega block break-all text-[clamp(1.5rem,4.2vw,3.75rem)] normal-case transition-colors duration-300 group-hover:text-fg-muted">
-            {profile.contact.email}
-          </span>
-          <span className="mt-3 block h-px w-full origin-left scale-x-0 bg-fg transition-transform duration-500 group-hover:scale-x-100 motion-reduce:transition-none" />
-        </a>
-      </Reveal>
-
-      <Reveal delay={0.1} className="mt-14 flex flex-wrap items-center gap-x-10 gap-y-4">
-        <span className="type-label text-fg-muted">
-          微信 · {profile.contact.wechat}
-        </span>
-        {profile.contact.links.map((link) => (
-          <a
-            key={link.label}
-            href={link.href}
-            className="type-label link-slide text-fg-muted transition-colors hover:text-fg"
+    <section aria-labelledby="contact-title" className="home-section-frame container-k border-t border-line">
+      <div className="home-section-body flex min-h-0 items-center py-[var(--section-y)] md:min-h-[92svh] md:py-[clamp(5rem,10vh,8rem)]">
+        <div className="w-full">
+          <div
+            id="contact-title"
+            className="[&_h2]:max-w-[15ch] [&_h2]:text-[clamp(2.7rem,6.4vw,6rem)] [&_h2]:leading-[1.03] [&_h2]:tracking-[-0.035em]"
           >
-            {link.label}
-          </a>
-        ))}
-        <span className="type-label ml-auto text-fg-muted">
-          {profile.contact.timezone}
-        </span>
-      </Reveal>
+            <SectionHead
+              index="05"
+              en="ONGOING"
+              zh="保持记录，是为了在浪潮里不掉队。"
+              bordered={false}
+            />
+          </div>
+
+          <Reveal className="mt-10 md:mt-14">
+            <p className="max-w-lg text-sm leading-relaxed text-fg-muted">
+              这里会继续更新。写正在做的事，也写那些还没想明白的问题。
+            </p>
+          </Reveal>
+
+          <Reveal delay={0.1} className="mt-16 flex flex-wrap items-center gap-x-10 gap-y-4 md:mt-24">
+            <a
+              href={`mailto:${profile.contact.email}`}
+              className="type-label link-slide text-fg-muted transition-colors hover:text-fg"
+            >
+              {profile.contact.email}
+            </a>
+            <span className="type-label text-fg-muted">
+              微信 · {profile.contact.wechat}
+            </span>
+            {profile.contact.links.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="type-label link-slide text-fg-muted transition-colors hover:text-fg"
+              >
+                {link.label}
+              </a>
+            ))}
+            <span className="type-label ml-auto text-fg-muted">
+              {profile.contact.timezone}
+            </span>
+          </Reveal>
+        </div>
+      </div>
     </section>
   );
 }

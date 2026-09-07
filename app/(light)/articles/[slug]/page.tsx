@@ -1,29 +1,30 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ReadingProgress } from "@/components/articles/ReadingProgress";
-import { Toc } from "@/components/articles/Toc";
 import { ArticleFooterNav } from "@/components/articles/ArticleFooterNav";
-import { AuthorCard } from "@/components/articles/AuthorCard";
+import { ArticleSidebar } from "@/components/articles/ArticleSidebar";
 import { CoverImage } from "@/components/ui/CoverImage";
-import { Avatar } from "@/components/ui/Avatar";
-import { TagRow } from "@/components/ui/Tag";
 import { JsonLd } from "@/components/ui/JsonLd";
-import { IconArrowRight } from "@/components/ui/icons";
-import { profile } from "@/lib/profile";
 import {
-  getAdjacentArticles,
   getAllArticles,
   getArticleBySlug,
   getRelatedArticles,
   toListItem,
 } from "@/lib/content/articles";
 import { extractToc } from "@/lib/toc";
-import { formatDateTimeCompact } from "@/lib/dates";
+import { formatDateCompact } from "@/lib/dates";
 import { blogPostingJsonLd, breadcrumbJsonLd, ogBase } from "@/lib/seo";
 
 interface Props {
   params: Promise<{ slug: string }>;
+}
+
+function estimateReadingMinutes(body: string): number {
+  const readable = body
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
+    .replace(/[`#>*_\-[\]()]/g, "")
+    .replace(/\s+/g, "");
+  return Math.max(1, Math.ceil(readable.length / 650));
 }
 
 /** 全部文章详情页在构建时静态生成；未知 slug 直接 404 */
@@ -62,12 +63,28 @@ export default async function ArticlePage({ params }: Props) {
 
   const { default: Content } = await import(`@/content/articles/${slug}.mdx`);
   const toc = extractToc(article.body);
-  const { prev, next } = getAdjacentArticles(slug);
-  const related = getRelatedArticles(slug).map(toListItem);
+  const chapters = toc.filter((item) => item.depth === 2);
+  const readingMinutes = estimateReadingMinutes(article.body);
+  const showToc = readingMinutes >= 5 && chapters.length > 1;
+  const allArticles = getAllArticles();
+  const rankedRelated = getRelatedArticles(slug);
+  const related = [
+    ...rankedRelated,
+    ...allArticles.filter(
+      (item) =>
+        item.slug !== slug &&
+        !rankedRelated.some((relatedArticle) => relatedArticle.slug === item.slug),
+    ),
+  ]
+    .slice(0, 3)
+    .map(toListItem);
+  const sidebarFeatured = allArticles
+    .filter((item) => item.slug !== slug)
+    .slice(0, 3)
+    .map(toListItem);
 
   return (
     <>
-      <ReadingProgress />
       <JsonLd data={blogPostingJsonLd(article)} />
       <JsonLd
         data={breadcrumbJsonLd([
@@ -77,93 +94,112 @@ export default async function ArticlePage({ params }: Props) {
         ])}
       />
 
-      <article className="container-k pb-[var(--section-y)] pt-28">
-        {/* 一条居中阅读柱：头部 / 封面 / 正文 / 尾部 同宽同左边线。
-            目录在 ≥1440px 时浮于右侧留白（绝对定位，不影响阅读柱居中），
-            窄屏改用正文上方的折叠目录。 */}
-        <div className="relative mx-auto w-full max-w-[44rem]">
-          {/* 头部 */}
-          <header>
-            <Link
-              href="/articles"
-              className="type-label link-slide inline-flex items-center gap-1.5 text-fg-muted hover:text-fg"
-            >
-              <IconArrowRight width={12} height={12} className="rotate-180" />
-              全部文章
-            </Link>
+      <article className="bg-bg pb-[var(--section-y)] pt-24 sm:pt-28">
+        <div className="container-k">
+          <div
+            data-article-breadcrumb
+            className="mx-auto flex w-full max-w-[74rem] items-center justify-start gap-2 text-xs text-fg-muted"
+          >
+            <Link href="/" className="link-slide hover:text-fg">首页</Link>
+            <span aria-hidden="true">›</span>
+            <Link href="/articles" className="link-slide hover:text-fg">文章</Link>
+            <span aria-hidden="true">›</span>
+            <span className="max-w-52 truncate sm:max-w-sm">{article.title}</span>
+          </div>
 
-            <p className="type-label mt-10 flex flex-wrap items-baseline gap-x-4 gap-y-2 text-fg-muted">
-              <span className="rounded-full bg-bg-sunken px-3 py-1">{article.category}</span>
-              <time dateTime={article.date}>{formatDateTimeCompact(article.date)}</time>
+          <header
+            data-article-header
+            className="mx-auto mt-8 w-full max-w-[74rem] text-center sm:mt-9"
+          >
+            <p className="flex flex-wrap items-baseline justify-center gap-x-1.5 text-sm text-fg-muted">
+              <time dateTime={article.date}>{formatDateCompact(article.date)}</time>
               {article.draft ? (
-                <span className="rounded-full bg-fg px-3 py-1 text-bg">
-                  草稿 · 仅开发环境可见
+                <span className="ml-2 rounded-full bg-fg px-3 py-1 text-xs text-bg">
+                  草稿 · 还没写完
                 </span>
               ) : null}
             </p>
 
-            <h1 className="type-headline mt-6 text-[clamp(1.875rem,4.5vw,3rem)]">
+            <h1 className="type-headline mx-auto mt-5 max-w-[68rem] text-[clamp(2.25rem,3.4vw,3.5rem)] leading-[1.14] tracking-[-0.025em]">
               {article.title}
             </h1>
 
-            {/* 作者署名行（公众号式） */}
-            <div className="mt-6 flex items-center gap-3">
-              <Avatar size={40} />
-              <div>
-                <p className="text-sm font-semibold">{profile.name}</p>
-                <p className="type-label mt-0.5 text-fg-muted">
-                  正在进化的 AI 产品经理
-                </p>
-              </div>
-            </div>
-
-            <p className="mt-6 border-l-2 border-fg pl-5 text-base leading-relaxed text-fg-muted">
+            <p className="mx-auto mt-5 line-clamp-2 max-w-[46rem] text-base leading-[1.75] text-fg-muted sm:text-lg">
               {article.summary}
             </p>
 
-            <div className="mt-7">
-              <TagRow tags={article.tags} />
+            <div className="mt-5 flex flex-wrap justify-center gap-2">
+              {article.tags.filter((tag) => tag !== "DEMO").slice(0, 3).map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full bg-bg-raised px-4 py-2 font-mono text-[0.6875rem] font-semibold tracking-[0.1em] text-fg shadow-[0_10px_30px_rgba(0,0,0,0.08)]"
+                >
+                  {tag}
+                </span>
+              ))}
             </div>
           </header>
 
-          {/* 封面 —— 与阅读柱同宽，圆角无边框 */}
           {article.cover ? (
-            <figure className="relative mt-10 aspect-[16/9] w-full overflow-hidden rounded-2xl bg-bg-sunken">
+            <figure className="relative mx-auto mt-8 aspect-[16/9] w-full max-w-[74rem] overflow-hidden rounded-[1.125rem] bg-bg-sunken">
               <CoverImage
                 src={article.cover}
                 alt={`${article.title} 封面图`}
-                sizes="(max-width: 768px) 100vw, 704px"
+                sizes="(max-width: 768px) 100vw, 1024px"
                 priority
               />
             </figure>
           ) : null}
-
-          {/* 折叠目录（<1440px） */}
-          <div className="mt-10 min-[1440px]:hidden">
-            <Toc items={toc} variant="collapsible" />
-          </div>
-
-          {/* 正文 */}
-          <div className="prose mt-12">
-            <Content />
-          </div>
-
-          {/* 文末作者卡 */}
-          <AuthorCard />
-
-          <ArticleFooterNav
-            prev={prev && toListItem(prev)}
-            next={next && toListItem(next)}
-            related={related}
-          />
-
-          {/* 浮动目录（≥1440px，绝对定位于阅读柱右侧留白） */}
-          <aside className="absolute left-full top-0 hidden h-full min-[1440px]:block">
-            <div className="sticky top-28 ml-12 w-52">
-              <Toc items={toc} variant="sidebar" />
-            </div>
-          </aside>
         </div>
+
+        <div className="container-k mt-12">
+          <div className="mx-auto grid w-full max-w-[74rem] grid-cols-1 items-start gap-7 lg:grid-cols-[4.5rem_minmax(0,1fr)_17rem] xl:grid-cols-[5rem_minmax(0,1fr)_20rem]">
+            <aside className="hidden justify-items-center gap-7 lg:grid">
+              <div className="grid size-20 place-items-center rounded-full border border-line bg-black text-center text-sm font-semibold leading-tight text-white">
+                <span>{readingMinutes} 分钟<br />阅读</span>
+              </div>
+            </aside>
+
+            <div className="min-w-0">
+              {showToc ? (
+                <details
+                  data-article-toc
+                  className="mb-8 border-y border-line py-3 text-sm text-fg-muted"
+                >
+                  <summary className="cursor-pointer py-1 font-medium hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-fg">
+                    目录
+                  </summary>
+                  <nav aria-label="文章目录" className="pt-3 pb-1">
+                    <ul className="space-y-1">
+                      {chapters.map((chapter) => (
+                        <li key={chapter.id}>
+                          <a
+                            href={`#${chapter.id}`}
+                            className="block py-1.5 leading-relaxed hover:text-fg hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg"
+                          >
+                            {chapter.text}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
+                </details>
+              ) : null}
+
+              <div className="prose article-prose min-w-0">
+                <Content />
+              </div>
+
+            </div>
+
+            <div className="hidden lg:block">
+              <ArticleSidebar featured={sidebarFeatured} />
+            </div>
+          </div>
+
+        </div>
+
+        <ArticleFooterNav related={related} />
       </article>
     </>
   );

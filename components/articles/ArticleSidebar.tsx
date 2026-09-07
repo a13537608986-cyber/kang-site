@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { profile } from "@/lib/profile";
 import type { ArticleListItem } from "@/lib/content/articles";
 import { FeaturedCarousel } from "@/components/articles/FeaturedCarousel";
@@ -14,8 +15,8 @@ export function ArticleSidebar({ featured }: { featured: ArticleListItem[] }) {
   return (
     <aside className="space-y-8" aria-label="侧栏">
       {/* 关于卡 */}
-      <section aria-labelledby="sidebar-about" className="card-float p-7">
-        <h2 id="sidebar-about" className="type-label text-fg-muted">
+      <section aria-labelledby="sidebar-about" className="rounded-2xl bg-bg-raised p-8 shadow-[var(--shadow-card)]">
+        <h2 id="sidebar-about" className="text-[12px] font-extrabold leading-[14.4px] tracking-[1.2px] text-fg-muted">
           ABOUT <span className="mx-2" aria-hidden="true">/</span> 关于
         </h2>
 
@@ -69,7 +70,7 @@ export function ArticleSidebar({ featured }: { featured: ArticleListItem[] }) {
       ) : null}
 
       {/* 工作经验卡 */}
-      <section aria-labelledby="sidebar-experience" className="card-float p-7">
+      <section aria-labelledby="sidebar-experience" className="rounded-2xl bg-bg-raised p-8 shadow-[var(--shadow-card)]">
         <h2 id="sidebar-experience" className="type-label text-fg-muted">
           EXPERIENCE <span className="mx-2" aria-hidden="true">/</span> 工作经验
         </h2>
@@ -101,19 +102,23 @@ export function ArticleSidebar({ featured }: { featured: ArticleListItem[] }) {
         </Link>
       </section>
 
-      {/* 常用工具卡（图标列表；图标为占位缩写，接入真实品牌图标后替换） */}
-      <section aria-labelledby="sidebar-toolkit" className="card-float p-7">
+      {/* 常用工具卡 */}
+      <section aria-labelledby="sidebar-toolkit" className="rounded-2xl bg-bg-raised p-8 shadow-[var(--shadow-card)]">
         <h2 id="sidebar-toolkit" className="type-label text-fg-muted">
           TOOLKIT <span className="mx-2" aria-hidden="true">/</span> 常用工具
         </h2>
         <ul className="mt-5 space-y-4">
           {profile.stack.map((tool) => (
             <li key={tool.name} className="flex items-center gap-3.5">
-              <span
-                aria-hidden="true"
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-fg font-mono text-xs font-semibold text-bg"
-              >
-                {tool.icon}
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[14px] bg-white shadow-[0_8px_20px_rgba(15,23,42,0.08)]">
+                <Image
+                  src={tool.icon}
+                  alt=""
+                  aria-hidden="true"
+                  width={28}
+                  height={28}
+                  className="h-7 w-7 object-contain"
+                />
               </span>
               <span className="min-w-0">
                 <span className="block text-sm font-semibold">{tool.name}</span>

@@ -15,7 +15,7 @@ import { profile } from "@/lib/profile";
  * 文字布局刻意只占顶部一行与底部信息条，中部留给画面中的人物；
  * 正式视频到位后若构图冲突，优先调 HeroMedia 的 objectPosition。
  */
-export function HomeHero({ media }: { media: ReactNode }) {
+export function HomeHero({ media, viewpoint }: { media: ReactNode; viewpoint: ReactNode }) {
   const root = useRef<HTMLDivElement>(null);
   const vpRef = useRef<HTMLElement>(null);
 
@@ -63,38 +63,22 @@ export function HomeHero({ media }: { media: ReactNode }) {
               scrub: true,
             },
           });
-          gsap.fromTo(
-            ".vp-line",
-            { yPercent: 120 },
-            {
-              yPercent: 0,
-              ease: "none",
-              stagger: 0.22,
-              scrollTrigger: {
-                trigger: vpRef.current,
-                start: "top 80%",
-                end: "top 22%",
-                scrub: true,
-              },
-            },
-          );
-          gsap.fromTo(
-            ".vp-extra",
-            { autoAlpha: 0, y: 36 },
-            {
-              autoAlpha: 1,
-              y: 0,
-              ease: "none",
-              scrollTrigger: {
-                trigger: vpRef.current,
-                start: "top 45%",
-                end: "top 14%",
-                scrub: true,
-              },
-            },
-          );
+
         },
       );
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.fromTo(".vp-char", { opacity: 0.3 }, {
+          opacity: 1, stagger: 0.035, ease: "none",
+          scrollTrigger: { trigger: vpRef.current, start: "top 80%", end: "top 25%", scrub: 0.6 },
+        });
+        gsap.utils.toArray<HTMLElement>(".vp-principle").forEach((item, i) => {
+          gsap.from(item, {
+            autoAlpha: 0, y: 20, duration: 0.7, delay: i * 0.09, ease: "power2.out",
+            scrollTrigger: { trigger: item, start: "top 90%", once: true },
+          });
+        });
+      });
+
     },
     { scope: root },
   );
@@ -103,7 +87,7 @@ export function HomeHero({ media }: { media: ReactNode }) {
     <div ref={root}>
       {/* 第一幕 —— 全屏视频 Hero，桌面端 sticky，被第二幕贴覆 */}
       <section
-        aria-label="首屏"
+        aria-label="李康 · 个人介绍"
         className="relative overflow-hidden motion-safe:md:sticky motion-safe:md:top-0 motion-safe:md:h-svh"
       >
         <h1 className="sr-only">KANG · 李康 — 正在进化的 AI 产品经理</h1>
@@ -151,45 +135,14 @@ export function HomeHero({ media }: { media: ReactNode }) {
         </div>
       </section>
 
-      {/* 第二幕 —— 核心观点（贴覆面板；顶部渐变边缘，柔和吃掉视频） */}
+      {/* 首页深色观点面板，首屏视频与内容保持原样。 */}
       <section
         ref={vpRef}
         aria-label="核心观点"
-        className="vp-cover relative z-10 flex min-h-[92svh] items-center"
+        data-theme="dark"
+        className="relative z-10 bg-bg text-fg"
       >
-        <div className="container-k py-28">
-          <p className="type-label text-fg-muted">
-            <span aria-hidden="true">00</span>
-            <span className="mx-3" aria-hidden="true">/</span>
-            <span lang="en">VIEWPOINT · 核心观点</span>
-          </p>
-
-          <blockquote className="mt-10">
-            {profile.viewpoint.map((line) => (
-              <span key={line} className="block overflow-hidden">
-                <span className="vp-line type-headline block text-[clamp(1.875rem,4.8vw,4.25rem)]">
-                  {line}
-                </span>
-              </span>
-            ))}
-          </blockquote>
-
-          <div className="vp-extra mt-14 grid gap-8 md:grid-cols-12">
-            <p className="type-label text-fg-faint md:col-span-3" lang="en">
-              FOCUS / 专业方向
-            </p>
-            <ul className="flex flex-wrap gap-x-8 gap-y-3 md:col-span-9" aria-label="专业方向">
-              {profile.focus.map((item, i) => (
-                <li key={item} className="flex items-baseline gap-2.5">
-                  <span className="type-label text-fg-faint" aria-hidden="true">
-                    F{i + 1}
-                  </span>
-                  <span className="text-base text-fg">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        {viewpoint}
       </section>
     </div>
   );

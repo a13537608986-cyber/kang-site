@@ -13,6 +13,8 @@ interface SectionHeadProps {
   more?: { href: string; label: string };
   /** 是否在背景渲染巨型编号衬字（深色区块用；默认 true） */
   numeral?: boolean;
+  /** 是否由标题组件绘制顶部章节线；首页居中区块会由外层绘制 */
+  bordered?: boolean;
 }
 
 /**
@@ -25,9 +27,13 @@ export function SectionHead({
   zh,
   more,
   numeral = true,
+  bordered = true,
 }: SectionHeadProps) {
   return (
-    <Reveal as="header" className="relative hairline-t pt-5">
+    <Reveal
+      as="header"
+      className={bordered ? "relative hairline-t pt-5" : "relative"}
+    >
       {numeral ? (
         <span className="section-numeral hidden md:block" aria-hidden="true">
           {index}

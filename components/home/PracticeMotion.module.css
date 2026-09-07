@@ -1,0 +1,13 @@
+.tools { position: relative; z-index: 20; pointer-events: none; width: 100%; max-width: 1440px; margin: 64px auto 0; padding-inline: clamp(24px, 5.2vw, 80px); }
+.caption { display: flex; justify-content: space-between; color: var(--fg-muted); font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; }
+.caption span { opacity: .7; }
+.arena { height: 350px; position: relative; overflow: visible; margin-top: 20px; border-bottom: 0; display: flex; flex-wrap: wrap; align-content: end; gap: 12px; padding-bottom: 20px; }
+.chip { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; gap: 12px; height: 64px; padding: 0 26px; border-radius: 999px; background: var(--fg); color: var(--bg); font-size: 21px; font-weight: 600; white-space: nowrap; user-select: none; pointer-events: auto; }
+.chip:nth-child(3n) { background: var(--gray-3); color: var(--gray-10); }
+.icon { width: 26px; height: 26px; background: currentColor; mask-repeat: no-repeat; mask-size: contain; mask-position: center; }
+.arena[data-active] .chip { position: absolute; left: 0; top: 0; cursor: grab; touch-action: none; will-change: transform; }
+.arena[data-active] .chip:active { cursor: grabbing; }
+@media(max-width: 767px) { .tools { margin-top: 40px; } .arena { height: 380px; } .chip { height: 48px; font-size: 16px; padding-inline: 18px; gap: 8px; } .icon { width: 21px; height: 21px; } }
+@media(prefers-reduced-motion: reduce) { .arena { height: auto; min-height: 160px; } .caption span { display: none; } }
+
+.vscodeIcon { background: url("/images/home/tools/vscode.png") center / contain no-repeat; }

@@ -69,7 +69,7 @@ export default async function OgImage() {
           }}
         >
           <span>AI PRODUCT MANAGER</span>
-          <span>JUDGMENT · EVALS · CONTEXT</span>
+          <span>LI KANG · SHENZHEN</span>
         </div>
       </div>
     ),

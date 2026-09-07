@@ -9,9 +9,9 @@ export const PROJECT_TYPES = ["product", "skill", "case-study"] as const;
 export type ProjectType = (typeof PROJECT_TYPES)[number];
 
 export const PROJECT_TYPE_LABEL: Record<ProjectType, { zh: string; en: string }> = {
-  product: { zh: "可体验产品", en: "PRODUCT" },
+  product: { zh: "项目与工具", en: "PROJECT / TOOL" },
   skill: { zh: "Skill", en: "SKILL" },
-  "case-study": { zh: "案例复盘", en: "CASE STUDY" },
+  "case-study": { zh: "复盘", en: "CASE STUDY" },
 };
 
 const slugField = z

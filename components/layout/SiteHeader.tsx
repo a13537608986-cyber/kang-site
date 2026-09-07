@@ -100,13 +100,13 @@ export function SiteHeader() {
       </a>
 
       <header
-        className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-300 ${
+        className={`fixed inset-x-0 top-0 z-50 h-16 transition-[background-color,border-color,backdrop-filter] duration-300 md:h-[88px] ${
           scrolled && !open
             ? "border-b border-line bg-[color-mix(in_srgb,var(--bg)_88%,transparent)] backdrop-blur-md"
             : "border-b border-transparent"
         }`}
       >
-        <div className="container-k flex h-16 items-center justify-between">
+        <div className="container-k flex h-full items-center justify-between">
           <Link
             href="/"
             aria-label="KANG — 返回首页"
@@ -115,7 +115,11 @@ export function SiteHeader() {
             {siteConfig.brand}
           </Link>
 
-          <nav aria-label="主导航" className="hidden items-center gap-9 md:flex">
+          <nav
+            data-desktop-nav
+            aria-label="主导航"
+            className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-9 whitespace-nowrap font-semibold [&_.type-label]:font-semibold md:flex"
+          >
             {siteConfig.nav.map((item, i) => {
               const active = isActive(pathname, item.href);
               return (
@@ -123,7 +127,7 @@ export function SiteHeader() {
                   key={item.href}
                   href={item.href}
                   aria-current={active ? "page" : undefined}
-                  className={`group flex items-baseline gap-2 text-sm transition-colors ${
+                  className={`group flex items-baseline gap-2 text-sm font-semibold transition-colors ${
                     active ? "text-fg" : "text-fg-muted hover:text-fg"
                   }`}
                 >
@@ -164,7 +168,7 @@ export function SiteHeader() {
         hidden={!open}
         className="fixed inset-0 z-40 bg-bg pt-24 md:hidden"
       >
-        <nav aria-label="移动端导航" className="container-k">
+        <nav aria-label="导航" className="container-k">
           <ul className="flex flex-col">
             {siteConfig.nav.map((item, i) => {
               const active = isActive(pathname, item.href);

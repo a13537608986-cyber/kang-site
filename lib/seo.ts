@@ -35,11 +35,11 @@ export function personJsonLd() {
     email: `mailto:${siteConfig.author.email}`,
     jobTitle: "AI 产品经理",
     knowsAbout: [
-      "AI 产品设计与商业化落地",
-      "AIGC 与多模态产品",
-      "B/C 端产品设计",
-      "产品策略与复杂业务体验",
-      "AI 工作流与效率工具",
+      "把大模型能力做成能上线的产品",
+      "AIGC 商拍与图像生成工作流",
+      "商业流程自动化",
+      "B 端与 C 端产品设计",
+      "AI 产品的判断与取舍",
     ],
   };
 }

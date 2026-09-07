@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { siteConfig } from "@/lib/site";
 import { profile } from "@/lib/profile";
-import { IconRss } from "@/components/ui/icons";
 
 /** 构建时固化的年份（站点全静态，构建年即版权年） */
 const buildYear = new Date().getFullYear();
@@ -49,15 +48,6 @@ export function SiteFooter() {
             <li className="text-sm text-fg-muted">
               微信 <span className="font-mono">{profile.contact.wechat}</span>
             </li>
-            <li>
-              <a
-                href="/rss.xml"
-                className="link-slide inline-flex items-center gap-1.5 text-sm text-fg-muted transition-colors hover:text-fg"
-              >
-                RSS
-                <IconRss width={12} height={12} />
-              </a>
-            </li>
           </ul>
         </div>
       </div>
@@ -65,7 +55,7 @@ export function SiteFooter() {
       <div className="hairline-t">
         <div className="container-k flex flex-wrap items-center justify-between gap-3 py-5">
           <p className="type-label text-fg-muted">
-            © {buildYear} {siteConfig.brand} · 保留所有权利
+            © {buildYear} {siteConfig.brand} · 想转载的话，打声招呼就行
           </p>
           <p className="type-label text-fg-muted" lang="en">
             DESIGNED &amp; BUILT BY {siteConfig.brand} · {profile.contact.timezone}
