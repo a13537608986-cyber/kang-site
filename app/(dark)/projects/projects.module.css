@@ -1,0 +1,3 @@
+:global(.theme-scope):has(.page) > :global(.grid-lines) {
+  display: none;
+}

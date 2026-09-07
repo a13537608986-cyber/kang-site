@@ -11,7 +11,7 @@ import {
   getAllProjects,
   getProjectBySlug,
 } from "@/lib/content/projects";
-import { PROJECT_TYPE_LABEL } from "@/lib/content/schema";
+import { PROJECT_PAGE_TYPE_LABEL } from "@/components/projects/projectPageLabels";
 import { formatDateLong } from "@/lib/dates";
 import { breadcrumbJsonLd, ogBase, projectJsonLd } from "@/lib/seo";
 
@@ -51,7 +51,7 @@ export default async function ProjectPage({ params }: Props) {
 
   const { default: Content } = await import(`@/content/projects/${slug}.mdx`);
   const { prev, next } = getAdjacentProjects(slug);
-  const typeLabel = PROJECT_TYPE_LABEL[project.type];
+  const typeLabel = PROJECT_PAGE_TYPE_LABEL[project.type];
 
   return (
     <article className={`container-k pb-[var(--section-y)] pt-28 ${styles.detail}`}>
@@ -92,7 +92,7 @@ export default async function ProjectPage({ params }: Props) {
           <TagRow tags={project.tags} />
         </div>
 
-        {/* 外部入口（仅可体验产品） */}
+        {/* 按实际提供的链接展示入口，没有外链也可独立展示项目 */}
         {project.demoUrl || project.repositoryUrl ? (
           <div className="mt-8 flex flex-wrap gap-3">
             {project.demoUrl ? (
@@ -102,7 +102,7 @@ export default async function ProjectPage({ params }: Props) {
                 rel="noopener noreferrer"
                 className="type-label inline-flex items-center gap-2 border border-fg bg-fg px-4 py-3 text-bg transition-colors hover:bg-transparent hover:text-fg"
               >
-                {["zhijian", "product-doc-assistant"].includes(project.slug) ? "去用一下" : "在线体验（占位链接）"}
+                {new URL(project.demoUrl).hostname === "example.com" ? "在线体验（占位链接）" : "去用一下"}
                 <IconArrowUpRight width={12} height={12} />
               </a>
             ) : null}
@@ -113,7 +113,7 @@ export default async function ProjectPage({ params }: Props) {
                 rel="noopener noreferrer"
                 className="type-label inline-flex items-center gap-2 border border-line-strong px-4 py-3 text-fg-muted transition-colors hover:border-fg hover:text-fg"
               >
-                源码（占位链接）
+                {new URL(project.repositoryUrl).hostname === "example.com" ? "源码（占位链接）" : "看源码"}
                 <IconArrowUpRight width={12} height={12} />
               </a>
             ) : null}

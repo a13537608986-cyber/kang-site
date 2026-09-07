@@ -41,3 +41,36 @@
   border: 0;
   border-radius: 0.75rem;
 }
+
+/* Local reading-list refinements, scoped here rather than changing global prose. */
+.detail :global(.prose) h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  font-size: 1.0625rem;
+  margin-top: 1.5em;
+}
+.detail :global(.prose) h4 > a {
+  text-decoration: none;
+  color: inherit;
+}
+.detail :global(.prose) ul,
+.detail :global(.prose) ol {
+  padding-left: 1.3em;
+}
+.detail :global(.prose) ul { list-style: disc; }
+.detail :global(.prose) ul ul { list-style: circle; }
+.detail :global(.prose) ul ul ul { list-style: square; }
+.detail :global(.prose) ul > li::before { content: none; }
+.detail :global(.prose) ul > li::marker {
+  color: var(--fg-faint);
+  font-size: 0.72em;
+}
+.detail :global(.prose) li { padding-left: 0.2em; }
+.detail :global(.prose) li > ul,
+.detail :global(.prose) li > ol {
+  margin-block: 0.65em 0.25em;
+  padding-left: 1.2em;
+}
+.detail :global(.prose) li > p { margin-block: 0.35em; }

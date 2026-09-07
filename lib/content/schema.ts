@@ -5,11 +5,12 @@ import { ISO_WITH_TZ } from "@/lib/dates";
 export const CATEGORIES = ["AI纪元", "AI 洞察", "实战复盘", "个人随想"] as const;
 export type Category = (typeof CATEGORIES)[number];
 
-export const PROJECT_TYPES = ["product", "case-study"] as const;
+export const PROJECT_TYPES = ["product", "skill", "case-study"] as const;
 export type ProjectType = (typeof PROJECT_TYPES)[number];
 
 export const PROJECT_TYPE_LABEL: Record<ProjectType, { zh: string; en: string }> = {
   product: { zh: "可体验产品", en: "PRODUCT" },
+  skill: { zh: "Skill", en: "SKILL" },
   "case-study": { zh: "案例复盘", en: "CASE STUDY" },
 };
 
