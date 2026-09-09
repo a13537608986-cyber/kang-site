@@ -1,0 +1,40 @@
+---
+title: "报告观察家"
+slug: "xhs-report-agent"
+type: "product"
+date: "2026-09-09T12:20:30+08:00"
+summary: "把 PDF、DOCX 报告整理为小红书图文草稿，提供三种封面、编辑预览和图文包导出。网页版可在线体验，模型调用与自动发布需在桌面环境使用。"
+cover: "/images/projects/xhs-report-agent/workspace.png"
+featured: false
+demoUrl: "https://xhs-report-agent.vercel.app/"
+repositoryUrl: "https://github.com/a13537608986-cyber/xhs-report-agent"
+tags: ["报告解读", "小红书", "图文工具", "开源改造"]
+draft: false
+---
+
+报告观察家是一款把报告整理为小红书图文草稿的工具，基于开源项目 [xhs-report-agent](https://github.com/hxy940219220-collab/xhs-report-agent) 改造。上传一份报告后，可以整理文案、挑选报告图片、调整封面，再把图文一起导出，留待检查和发布。
+
+## 功能
+
+- **上传报告**：支持 PDF 和 DOCX，提取文档文字与报告图片。PDF 请使用可复制文字的版本；旧版 `.doc` 需要先转成 `.docx`。
+- **整理图文草稿**：从报告内容生成初稿，再编辑标题、正文和标签，核对原文依据。
+- **三种封面**：提供紫色、纸张和蓝色三种风格，可以编辑封面文字并查看效果。
+- **编辑与预览**：在同一工作区调整文案、封面和配图，也可以查看手机预览。
+- **导出图文包**：下载 ZIP，包含封面 PNG、所选报告图片、发布文案和图片顺序说明，方便留存或手动发布。
+
+![报告观察家桌面编辑器：左侧封面预览，右侧编辑标题与正文；内容为合成示例数据（DEMO），不代表真实调研结论](/images/projects/xhs-report-agent/workspace.png)
+
+截图来自项目实际编辑器，展示的是合成示例数据（DEMO），不是实际报告结论或使用成效。
+
+## 开始使用
+
+点击上方「去用一下」进入网页版在线体验，可以先用示例了解编辑流程，再上传自己的报告。整理完成后，检查文案是否忠于原文、图片是否清晰，以及引用和使用权限是否合适，再导出图文包。
+
+网页版用于体验报告整理、编辑、预览和导出流程，**不提供在线模型调用或自动发布**。模型调用需要桌面环境并配置模型连接；小红书自动发布也依赖桌面环境，需要完成账号登录和发布前确认。生成的内容只是草稿，仍需人工核对。
+
+## 开源来源
+
+本项目是在开源项目基础上的改造，并非从零原创。感谢原项目提供基础实现。
+
+- [原仓库：hxy940219220-collab/xhs-report-agent](https://github.com/hxy940219220-collab/xhs-report-agent)
+- [当前源码：a13537608986-cyber/xhs-report-agent](https://github.com/a13537608986-cyber/xhs-report-agent)
