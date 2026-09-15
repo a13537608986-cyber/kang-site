@@ -3,6 +3,7 @@ import { Archivo, DM_Sans, IBM_Plex_Mono } from "next/font/google";
 import { siteConfig, isProduction } from "@/lib/site";
 import { Preloader } from "@/components/layout/Preloader";
 import { LenisProvider } from "@/components/motion/LenisProvider";
+import { Chatbot } from "@/components/chat/Chatbot";
 import "./globals.css";
 
 /**
@@ -94,6 +95,7 @@ export default function RootLayout({
       <body className="min-h-full">
         <Preloader />
         <LenisProvider>{children}</LenisProvider>
+        <Chatbot />
       </body>
     </html>
   );
