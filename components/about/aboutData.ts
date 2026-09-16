@@ -61,9 +61,9 @@ export const aboutStats: AboutStat[] = [
 
 export const journeyRows: AboutJourneyRow[] = [
   {
-    year: "2021",
+    year: "2020",
     title: "从设计走向产品",
-    copy: "从 UI 设计转岗成为产品经理。我开始关心的不只是界面好不好看，还有一个产品为什么值得被做出来。",
+    copy: "从 UI 设计转做产品经理，加入腾讯。我开始关心的不只是界面好不好看，还有一个产品为什么值得被做出来。",
     meta: "设计 · 产品",
   },
   {
@@ -77,6 +77,12 @@ export const journeyRows: AboutJourneyRow[] = [
     title: "第一次把 AI 产品从 0 做到 1",
     copy: "亲身走完模型验证、产品设计、灰度到全量上线。也开始习惯 AI 的变化速度：能力边界以月为单位向前推进，很多刚刚得到的答案，很快又需要重新思考。",
     meta: "从 0 到 1 · 全量上线",
+  },
+  {
+    year: "2026",
+    title: "做餐参AI",
+    copy: "加入弃疾数智科技做产品总监，主导餐参AI 从 1.0 优化到 1.5。",
+    meta: "产品总监 · 餐参AI",
   },
   {
     year: "2026",

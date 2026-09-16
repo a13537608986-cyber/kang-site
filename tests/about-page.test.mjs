@@ -175,9 +175,11 @@ test("about journey tells four real turning points instead of a resume timeline"
   const dataSource = await readFile(dataPath, "utf8");
   const source = await readFile(clonePath, "utf8");
 
-  assert.match(dataSource, /year: "2021"[\s\S]*title: "从设计走向产品"/);
+  assert.match(dataSource, /year: "2020"[\s\S]*title: "从设计走向产品"/);
   assert.match(dataSource, /year: "2023"[\s\S]*title: "开始做 AI 产品"/);
   assert.match(dataSource, /year: "2024"[\s\S]*title: "第一次把 AI 产品从 0 做到 1"/);
+  assert.match(dataSource, /year: "2026"[\s\S]*title: "做餐参AI"/);
+  assert.match(dataSource, /产品总监 · 餐参AI/);
   assert.match(dataSource, /year: "2026"[\s\S]*title: "开始 Vibe Coding"/);
   assert.match(dataSource, /GPT · Smart Photo 启动/);
   assert.match(dataSource, /从 0 到 1 · 全量上线/);

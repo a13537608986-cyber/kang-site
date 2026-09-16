@@ -404,7 +404,7 @@ export function AboutClone({ articles }: AboutCloneProps) {
               <span className={styles.journeyLine} data-journey-line aria-hidden="true" />
               <ol className={styles.journeyList}>
                 {journeyRows.map((item) => (
-                  <li data-journey-row key={item.year}>
+                  <li data-journey-row key={`${item.year}-${item.title}`}>
                     <time>{item.year}</time>
                     <div>
                       <h3>{item.title}</h3>
