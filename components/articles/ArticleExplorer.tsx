@@ -1,6 +1,9 @@
 "use client";
 
-import { useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { Suspense, useMemo, useRef, type ReactNode } from "react";
+import { flushSync } from "react-dom";
+import { useSearchParams } from "next/navigation";
+import { clampPage, listHref, pageWindow, parseCategory, parsePage } from "@/lib/article-navigation";
 import Link from "next/link";
 import {
   Atom,
@@ -26,35 +29,44 @@ const TOPIC_ICONS = {
 const ARTICLES_PER_PAGE = 8;
 
 /** Revision 首页式文章归档：完整主题区 + 横向文章列表 + 右侧资料栏。 */
-export function ArticleExplorer({
+export function ArticleExplorer(props: { articles: ArticleListItem[]; sidebar: ReactNode }) {
+  return <Suspense fallback={<ExplorerView {...props} params={new URLSearchParams()} />}><ExplorerWithUrl {...props} /></Suspense>;
+}
+
+function ExplorerWithUrl(props: { articles: ArticleListItem[]; sidebar: ReactNode }) {
+  const params = useSearchParams();
+  return <ExplorerView {...props} params={params} />;
+}
+
+function ExplorerView({
   articles,
   sidebar,
+  params,
 }: {
   articles: ArticleListItem[];
   sidebar: ReactNode;
+  params: Pick<URLSearchParams, 'get'>;
 }) {
-  const [category, setCategory] = useState<CategoryFilter>("all");
-  const [page, setPage] = useState(1);
+  const category = parseCategory(params.get('category'), CATEGORIES);
   const archiveRef = useRef<HTMLElement>(null);
-  const scrollToTopAfterPageChange = useRef(false);
   const filtered = useMemo(
     () => [...filterArticles(articles, category, "")].sort(byDateDesc),
     [articles, category],
   );
   const totalPages = Math.max(1, Math.ceil(filtered.length / ARTICLES_PER_PAGE));
+  const page = clampPage(parsePage(params.get('page')), totalPages);
   const pageStart = (page - 1) * ARTICLES_PER_PAGE;
   const visibleArticles = filtered.slice(pageStart, pageStart + ARTICLES_PER_PAGE);
 
   function changePage(nextPage: number) {
     const targetPage = Math.max(1, Math.min(totalPages, nextPage));
     if (targetPage === page) return;
-    scrollToTopAfterPageChange.current = true;
-    setPage(targetPage);
+    navigate(targetPage, category);
   }
 
-  useLayoutEffect(() => {
-    if (!scrollToTopAfterPageChange.current) return;
-    scrollToTopAfterPageChange.current = false;
+  function navigate(nextPage: number, nextCategory: CategoryFilter) {
+    // Only explicit interactions scroll. Popstate, refresh and hydration never do.
+    flushSync(() => window.history.pushState(null, '', listHref(nextPage, nextCategory)));
     if (!archiveRef.current) return;
     // Keep the topic filters visible, without repeating the introductory hero.
     const headerHeight = document.querySelector("header")?.getBoundingClientRect().height ?? 0;
@@ -63,7 +75,7 @@ export function ArticleExplorer({
       top: Math.max(0, window.scrollY + archiveTop - headerHeight),
       behavior: "instant",
     });
-  }, [page]);
+  }
 
   return (
     <section ref={archiveRef} aria-label="文章档案" style={{ overflowAnchor: "none" }}>
@@ -81,8 +93,7 @@ export function ArticleExplorer({
                 type="button"
                 aria-pressed={active}
                 onClick={() => {
-                  setCategory(item);
-                  setPage(1);
+                  navigate(1, item);
                 }}
                 className={`inline-flex min-h-12 items-center gap-2.5 rounded-full px-6 text-[16px] font-bold leading-5 tracking-[-0.64px] transition-[background-color,color,box-shadow,transform] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-3 ${
                   active
@@ -106,8 +117,7 @@ export function ArticleExplorer({
               <button
                 type="button"
                 onClick={() => {
-                  setCategory("all");
-                  setPage(1);
+                  navigate(1, "all");
                 }}
                 className="mt-5 text-[15px] font-semibold text-fg underline underline-offset-4"
               >
@@ -118,46 +128,38 @@ export function ArticleExplorer({
             <>
               <div className="grid gap-y-10">
                 {visibleArticles.map((article) => (
-                  <ArticleCard key={article.slug} article={article} />
+                  <ArticleCard key={article.slug} article={article} from={listHref(page, category)} />
                 ))}
               </div>
 
               {totalPages > 1 ? (
-                <nav aria-label="文章分页" className="mt-12 flex flex-wrap items-center justify-between gap-4">
-                  <button
-                    type="button"
-                    onClick={() => changePage(page - 1)}
-                    disabled={page === 1}
-                    className="inline-flex min-h-12 items-center rounded-full bg-white px-6 text-[15px] font-bold text-black shadow-[0_10px_30px_rgba(0,0,0,0.08)] transition-[box-shadow,transform,opacity] hover:-translate-y-0.5 hover:shadow-[0_14px_34px_rgba(0,0,0,0.12)] disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:translate-y-0"
-                  >
-                    ← 上一页
-                  </button>
-                  <div className="order-first flex w-full flex-wrap justify-center gap-2 sm:order-none sm:w-auto">
-                    {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
-                      <button
-                        key={pageNumber}
-                        type="button"
-                        aria-label={`第 ${pageNumber} 页`}
-                        aria-current={page === pageNumber ? "page" : undefined}
-                        onClick={() => changePage(pageNumber)}
-                        className={`inline-flex size-12 items-center justify-center rounded-full text-[15px] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-fg ${
-                          page === pageNumber
-                            ? "bg-fg text-bg"
-                            : "text-fg-muted hover:bg-bg-raised hover:text-fg"
-                        }`}
-                      >
-                        {pageNumber}
+                <nav aria-label="文章分页" className="mt-12 grid grid-cols-[auto_1fr_auto] items-center gap-x-1 gap-y-3 text-xs sm:flex sm:flex-nowrap sm:justify-between sm:gap-2">
+                  <button type="button" onClick={() => changePage(page - 1)} disabled={page === 1}
+                    className="min-h-11 shrink-0 rounded-full px-2 text-fg hover:bg-bg-raised disabled:opacity-35" aria-label="上一页">←<span className="hidden sm:inline"> 上一页</span></button>
+                  <div className="flex min-w-0 items-center justify-center gap-0 sm:gap-1">
+                    {pageWindow(page, totalPages).map((item) => typeof item === 'string' ? (
+                      <span key={item} aria-hidden="true" className="px-1 text-fg-muted">…</span>
+                    ) : (
+                      <button key={item} type="button" aria-label={`第 ${item} 页`}
+                        aria-current={page === item ? "page" : undefined} onClick={() => changePage(item)}
+                        className={`inline-flex h-11 min-w-8 items-center justify-center rounded-full px-1 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fg sm:min-w-9 ${page === item ? "bg-fg text-bg" : "text-fg-muted hover:bg-bg-raised hover:text-fg"}`}>
+                        {item}
                       </button>
                     ))}
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => changePage(page + 1)}
-                    disabled={page === totalPages}
-                    className="inline-flex min-h-12 items-center rounded-full bg-white px-6 text-[15px] font-bold text-black shadow-[0_10px_30px_rgba(0,0,0,0.08)] transition-[box-shadow,transform,opacity] hover:-translate-y-0.5 hover:shadow-[0_14px_34px_rgba(0,0,0,0.12)] disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:translate-y-0"
-                  >
-                    下一页 →
-                  </button>
+                  <button type="button" onClick={() => changePage(page + 1)} disabled={page === totalPages}
+                    className="min-h-11 shrink-0 rounded-full px-2 text-fg hover:bg-bg-raised disabled:opacity-35" aria-label="下一页"><span className="hidden sm:inline">下一页 </span>→</button>
+                  <form key={`${category}-${page}`} className="col-span-3 flex shrink-0 items-center justify-center gap-1 text-fg-muted" onSubmit={(event) => {
+                    event.preventDefault();
+                    const value = new FormData(event.currentTarget).get('page');
+                    changePage(parsePage(typeof value === 'string' ? value : null));
+                  }}>
+                    <label htmlFor="article-jump-page">页码</label>
+                    <input id="article-jump-page" name="page" type="number" min={1} max={totalPages} required defaultValue={page}
+                      className="h-11 w-12 rounded-lg border border-line bg-bg px-1 text-center text-fg" />
+                    <span>/ {totalPages}</span>
+                    <button type="submit" className="min-h-11 rounded-lg px-2 text-fg hover:bg-bg-raised">跳转</button>
+                  </form>
                 </nav>
               ) : null}
             </>
@@ -170,13 +172,13 @@ export function ArticleExplorer({
   );
 }
 
-function ArticleCard({ article }: { article: ArticleListItem }) {
+function ArticleCard({ article, from }: { article: ArticleListItem; from: string }) {
   const tags = article.tags.filter((tag) => tag !== "DEMO").slice(0, 2);
 
   return (
     <article className="border-b border-line pb-10">
       <Link
-        href={`/articles/${article.slug}`}
+        href={`/articles/${article.slug}?${new URLSearchParams({ from })}`}
         className="group grid gap-y-4 md:grid-cols-[minmax(0,400px)_minmax(0,388px)] md:items-stretch md:gap-x-5"
       >
         <div className="relative aspect-video overflow-hidden rounded-2xl bg-bg-sunken md:aspect-auto md:min-h-[253px]">

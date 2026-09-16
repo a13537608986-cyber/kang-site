@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArticleReturnLink } from "@/components/articles/ArticleReturnLink";
 import { notFound } from "next/navigation";
 import { ArticleFooterNav } from "@/components/articles/ArticleFooterNav";
 import { ArticleSidebar } from "@/components/articles/ArticleSidebar";
@@ -102,7 +103,7 @@ export default async function ArticlePage({ params }: Props) {
           >
             <Link href="/" className="link-slide hover:text-fg">首页</Link>
             <span aria-hidden="true">›</span>
-            <Link href="/articles" className="link-slide hover:text-fg">文章</Link>
+            <ArticleReturnLink />
             <span aria-hidden="true">›</span>
             <span className="max-w-52 truncate sm:max-w-sm">{article.title}</span>
           </div>
