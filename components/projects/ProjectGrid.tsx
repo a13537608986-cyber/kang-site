@@ -120,6 +120,7 @@ function SpotlightCard({ project }: { project: ProjectListItem }) {
 
 function ProjectCard({ project, index }: { project: ProjectListItem; index: number }) {
   const typeLabel = PROJECT_PAGE_TYPE_LABEL[project.type];
+  const coverContainsLabels = project.slug === "zhijian-mindmap";
   return (
     <li className="min-w-0">
       <Link
@@ -140,16 +141,20 @@ function ProjectCard({ project, index }: { project: ProjectListItem; index: numb
               <span className="type-label text-fg-muted">项目封面待补</span>
             </div>
           )}
-          <span className="type-label absolute left-4 top-4 rounded-full border border-line-strong bg-bg/90 px-3 py-1.5 backdrop-blur-md sm:left-5 sm:top-5">
-            {typeLabel.zh}
-          </span>
-          <div className="absolute inset-x-4 bottom-4 flex flex-wrap gap-2 sm:inset-x-5 sm:bottom-5">
-            {project.tags.slice(0, 3).map((tag) => (
-              <span key={tag} className="type-label rounded-full border border-line-strong bg-bg/85 px-3 py-1.5 backdrop-blur-md">
-                {tag}
+          {!coverContainsLabels && (
+            <>
+              <span className="type-label absolute left-4 top-4 rounded-full border border-line-strong bg-bg/90 px-3 py-1.5 backdrop-blur-md sm:left-5 sm:top-5">
+                {typeLabel.zh}
               </span>
-            ))}
-          </div>
+              <div className="absolute inset-x-4 bottom-4 flex flex-wrap gap-2 sm:inset-x-5 sm:bottom-5">
+                {project.tags.slice(0, 3).map((tag) => (
+                  <span key={tag} className="type-label rounded-full border border-line-strong bg-bg/85 px-3 py-1.5 backdrop-blur-md">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </>
+          )}
         </div>
 
         <div className="flex flex-1 flex-col rounded-[1rem] border border-line bg-fg/[0.03] p-5 sm:p-6">

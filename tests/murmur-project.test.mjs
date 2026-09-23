@@ -253,7 +253,7 @@ test("all existing projects preserve default actions and Murmur sorts newest by 
       assert.equal(
         parsed.detailCover,
         redesigned.has(parsed.slug)
-          ? `/images/projects/${parsed.slug}/cover-device-detail-v3.webp`
+          ? `/images/projects/${parsed.slug}/cover-device-detail-${parsed.slug === "zhijian-mindmap" ? "v4" : "v3"}.webp`
           : null,
       );
       assert.equal(parsed.demoUrl, original.demoUrl ?? null);
