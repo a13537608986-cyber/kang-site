@@ -81,11 +81,12 @@ export function projectJsonLd(project: Project) {
     ...(project.cover ? { image: absoluteUrl(project.cover) } : {}),
   };
   if (project.type === "product") {
+    const installUrl = project.downloadUrl ?? project.demoUrl;
     return {
       ...base,
       "@type": "SoftwareApplication",
-      applicationCategory: "WebApplication",
-      ...(project.demoUrl ? { installUrl: project.demoUrl } : {}),
+      applicationCategory: project.downloadUrl ? "UtilitiesApplication" : "WebApplication",
+      ...(installUrl ? { installUrl } : {}),
     };
   }
   return { ...base, "@type": "Article", genre: "案例复盘" };

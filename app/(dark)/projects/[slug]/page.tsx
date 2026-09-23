@@ -29,6 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const project = getProjectBySlug(slug);
   if (!project) return {};
+  const heroCover = project.detailCover ?? project.cover;
   return {
     title: project.title,
     description: project.summary,
@@ -39,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `/projects/${project.slug}`,
       title: project.title,
       description: project.summary,
-      ...(project.cover ? { images: [{ url: project.cover }] } : {}),
+      ...(heroCover ? { images: [{ url: heroCover }] } : {}),
     },
   };
 }
@@ -52,9 +53,12 @@ export default async function ProjectPage({ params }: Props) {
   const { default: Content } = await import(`@/content/projects/${slug}.mdx`);
   const { prev, next } = getAdjacentProjects(slug);
   const typeLabel = PROJECT_PAGE_TYPE_LABEL[project.type];
+  const heroCover = project.detailCover ?? project.cover;
 
   return (
-    <article className={`container-k pb-[var(--section-y)] pt-28 ${styles.detail}`}>
+    <article
+      className={`container-k pb-[var(--section-y)] pt-28 ${styles.detail}`}
+    >
       <JsonLd data={projectJsonLd(project)} />
       <JsonLd
         data={breadcrumbJsonLd([
@@ -93,8 +97,19 @@ export default async function ProjectPage({ params }: Props) {
         </div>
 
         {/* 按实际提供的链接展示入口，没有外链也可独立展示项目 */}
-        {project.demoUrl || project.repositoryUrl ? (
+        {project.downloadUrl || project.demoUrl || project.repositoryUrl ? (
           <div className="mt-8 flex flex-wrap gap-3">
+            {project.downloadUrl ? (
+              <a
+                href={project.downloadUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="type-label inline-flex items-center gap-2 border border-fg bg-fg px-4 py-3 text-bg transition-colors hover:bg-transparent hover:text-fg"
+              >
+                {project.downloadLabel}
+                <IconArrowUpRight width={12} height={12} />
+              </a>
+            ) : null}
             {project.demoUrl ? (
               <a
                 href={project.demoUrl}
@@ -113,18 +128,25 @@ export default async function ProjectPage({ params }: Props) {
                 rel="noopener noreferrer"
                 className="type-label inline-flex items-center gap-2 border border-line-strong px-4 py-3 text-fg-muted transition-colors hover:border-fg hover:text-fg"
               >
-                {new URL(project.repositoryUrl).hostname === "example.com" ? "源码（占位链接）" : "看源码"}
+                {new URL(project.repositoryUrl).hostname === "example.com"
+                  ? "源码（占位链接）"
+                  : project.repositoryLabel}
                 <IconArrowUpRight width={12} height={12} />
               </a>
             ) : null}
           </div>
         ) : null}
+        {project.actionNote ? (
+          <p className="mt-4 text-sm leading-relaxed text-fg-muted">
+            {project.actionNote}
+          </p>
+        ) : null}
       </header>
 
-      {project.cover ? (
+      {heroCover ? (
         <figure className="relative mx-auto mt-12 aspect-[21/9] max-w-5xl overflow-hidden border border-line">
           <CoverImage
-            src={project.cover}
+            src={heroCover}
             alt={`${project.title} 封面图`}
             sizes="(max-width: 1024px) 100vw, 1024px"
             priority

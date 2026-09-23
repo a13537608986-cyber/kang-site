@@ -2,13 +2,21 @@ import { z } from "zod";
 import { ISO_WITH_TZ } from "@/lib/dates";
 
 /** 文章栏目（与旧站 kangkangpm.com 保持一致；新增栏目改这里即可，筛选 UI 自动跟随） */
-export const CATEGORIES = ["AI纪元", "AI 洞察", "实战复盘", "个人随想"] as const;
+export const CATEGORIES = [
+  "AI纪元",
+  "AI 洞察",
+  "实战复盘",
+  "个人随想",
+] as const;
 export type Category = (typeof CATEGORIES)[number];
 
 export const PROJECT_TYPES = ["product", "skill", "case-study"] as const;
 export type ProjectType = (typeof PROJECT_TYPES)[number];
 
-export const PROJECT_TYPE_LABEL: Record<ProjectType, { zh: string; en: string }> = {
+export const PROJECT_TYPE_LABEL: Record<
+  ProjectType,
+  { zh: string; en: string }
+> = {
   product: { zh: "项目与工具", en: "PROJECT / TOOL" },
   skill: { zh: "Skill", en: "SKILL" },
   "case-study": { zh: "复盘", en: "CASE STUDY" },
@@ -54,9 +62,18 @@ export const projectSchema = z
     date: dateField,
     summary: z.string().min(1),
     cover: coverField,
+    detailCover: z
+      .string()
+      .startsWith("/", "detailCover 必须是以 / 开头的站内路径")
+      .nullable()
+      .default(null),
     featured: z.boolean().default(false),
+    downloadUrl: z.string().url().nullable().default(null),
+    downloadLabel: z.string().min(1).default("下载应用"),
+    actionNote: z.string().min(1).nullable().default(null),
     demoUrl: z.string().url().nullable().default(null),
     repositoryUrl: z.string().url().nullable().default(null),
+    repositoryLabel: z.string().min(1).default("看源码"),
     tags: z.array(z.string().min(1)).default([]),
     draft: z.boolean().default(false),
   })
