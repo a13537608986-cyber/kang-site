@@ -121,7 +121,7 @@ export default async function ArticlePage({ params }: Props) {
               ) : null}
             </p>
 
-            <h1 className="type-headline mx-auto mt-5 max-w-[68rem] text-[clamp(2.25rem,3.4vw,3.5rem)] leading-[1.14] tracking-[-0.025em]">
+            <h1 className="type-headline mx-auto mt-5 max-w-[68rem] text-balance text-[clamp(2.25rem,3.4vw,3.5rem)] leading-[1.14] tracking-[-0.025em]">
               {article.title}
             </h1>
 
