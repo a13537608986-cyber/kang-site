@@ -244,7 +244,18 @@ test("all existing projects preserve default actions and Murmur sorts newest by 
       assert.equal(parsed.downloadLabel, "下载应用");
       assert.equal(parsed.actionNote, null);
       assert.equal(parsed.repositoryLabel, "看源码");
-      assert.equal(parsed.detailCover, null);
+      const redesigned = new Set([
+        "product-doc-assistant",
+        "zhijian",
+        "xhs-report-agent",
+        "zhijian-mindmap",
+      ]);
+      assert.equal(
+        parsed.detailCover,
+        redesigned.has(parsed.slug)
+          ? `/images/projects/${parsed.slug}/cover-device-detail-v2.webp`
+          : null,
+      );
       assert.equal(parsed.demoUrl, original.demoUrl ?? null);
       assert.equal(parsed.repositoryUrl, original.repositoryUrl ?? null);
     }
