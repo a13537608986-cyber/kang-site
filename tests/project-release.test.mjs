@@ -8,7 +8,7 @@ test("project detail preserves production labels and honest tool links", () => {
   const page = read("app/(dark)/projects/[slug]/page.tsx");
   assert.match(page, /PROJECT_PAGE_TYPE_LABEL\[project.type\]/);
   assert.match(page, /在线体验（占位链接）/);
-  assert.match(page, /源码（占位链接）/);
+  assert.doesNotMatch(page, /project\.repositoryUrl|源码（占位链接）/);
   assert.match(page, /去用一下/);
   for (const [slug, url] of [
     ["zhijian", "https://zhijian-zeta.vercel.app/"],

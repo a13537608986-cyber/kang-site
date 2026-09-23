@@ -97,7 +97,7 @@ export default async function ProjectPage({ params }: Props) {
         </div>
 
         {/* 按实际提供的链接展示入口，没有外链也可独立展示项目 */}
-        {project.downloadUrl || project.demoUrl || project.repositoryUrl ? (
+        {project.downloadUrl || project.demoUrl ? (
           <div className="mt-8 flex flex-wrap gap-3">
             {project.downloadUrl ? (
               <a
@@ -118,19 +118,6 @@ export default async function ProjectPage({ params }: Props) {
                 className="type-label inline-flex items-center gap-2 border border-fg bg-fg px-4 py-3 text-bg transition-colors hover:bg-transparent hover:text-fg"
               >
                 {new URL(project.demoUrl).hostname === "example.com" ? "在线体验（占位链接）" : "去用一下"}
-                <IconArrowUpRight width={12} height={12} />
-              </a>
-            ) : null}
-            {project.repositoryUrl ? (
-              <a
-                href={project.repositoryUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="type-label inline-flex items-center gap-2 border border-line-strong px-4 py-3 text-fg-muted transition-colors hover:border-fg hover:text-fg"
-              >
-                {new URL(project.repositoryUrl).hostname === "example.com"
-                  ? "源码（占位链接）"
-                  : project.repositoryLabel}
                 <IconArrowUpRight width={12} height={12} />
               </a>
             ) : null}

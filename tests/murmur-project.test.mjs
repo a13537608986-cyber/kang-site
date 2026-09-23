@@ -34,7 +34,7 @@ test("metadata supports download actions with compatible defaults", async () => 
   );
 });
 
-test("detail renders data-driven actions and an optional note without Murmur special cases", async () => {
+test("detail renders demo and download actions without exposing source links", async () => {
   const source = await readFile(pagePath, "utf8");
   assert.match(source, /project\.downloadUrl/);
   assert.match(
@@ -43,24 +43,20 @@ test("detail renders data-driven actions and an optional note without Murmur spe
   );
   assert.doesNotMatch(source, /下载 Murmur/);
   assert.doesNotMatch(source, /project\.slug\s*===\s*["']murmur["']/);
-  assert.match(source, /project\.repositoryLabel/);
+  assert.doesNotMatch(source, /project\.repositoryUrl|project\.repositoryLabel/);
   assert.ok(
     source.indexOf("project.downloadUrl") < source.indexOf("project.demoUrl"),
   );
   assert.match(source, /href=\{project\.demoUrl\}[\s\S]*?去用一下/);
   assert.match(
     source,
-    /href=\{project\.repositoryUrl\}[\s\S]*?project\.repositoryLabel/,
-  );
-  assert.match(
-    source,
     /\{project\.actionNote\s*\?\s*\(\s*<p\b[^>]*>\s*\{project\.actionNote\}\s*<\/p>\s*\)\s*:\s*null\}/,
   );
   assert.ok(
     source.indexOf("{project.actionNote") >
-      source.indexOf("project.repositoryLabel"),
+      source.indexOf("project.demoUrl"),
   );
-  assert.match(source, /"源码（占位链接）"/);
+  assert.doesNotMatch(source, /源码（占位链接）/);
   assert.doesNotMatch(source, /macOS 14\+ · Apple 芯片 · 需自备 API Key/);
 });
 
@@ -81,7 +77,7 @@ test("Murmur exposes download requirements and accessible media", async () => {
     source,
     /downloadUrl: "https:\/\/github\.com\/a13537608986-cyber\/murmur\/releases\/latest"/,
   );
-  assert.match(source, /repositoryLabel: "查看 GitHub"/);
+  assert.doesNotMatch(source, /repositoryUrl:|repositoryLabel:/);
   assert.match(
     source,
     /<video[\s\S]*controls[\s\S]*muted[\s\S]*preload="metadata"/,
@@ -153,7 +149,8 @@ test("Murmur explains model choice and the essential download information", asyn
     assert.match(body, requirement);
   }
   assert.match(body, /下载 Murmur[^\n]*最新 Release/);
-  assert.match(body, /查看 GitHub[^\n]*说明[^\n]*反馈/);
+  assert.match(body, /下载 Murmur[^\n]*最新 Release[^\n]*发布说明/);
+  assert.doesNotMatch(body, /查看 GitHub|看源码/);
 });
 
 test("Murmur keeps defensive copy and unconfirmed features out of the introduction", async () => {
@@ -217,11 +214,8 @@ test("Murmur frontmatter parses with exact public links and publishing boundarie
     meta.downloadUrl,
     "https://github.com/a13537608986-cyber/murmur/releases/latest",
   );
-  assert.equal(
-    meta.repositoryUrl,
-    "https://github.com/a13537608986-cyber/murmur",
-  );
-  assert.equal(meta.repositoryLabel, "查看 GitHub");
+  assert.equal(meta.repositoryUrl, null);
+  assert.equal(meta.repositoryLabel, "看源码");
   assert.equal(meta.downloadLabel, "下载 Murmur");
   assert.equal(meta.actionNote, "macOS 14+ · Apple 芯片 · 需自备 API Key");
   assert.equal(meta.demoUrl, null);
@@ -257,7 +251,7 @@ test("all existing projects preserve default actions and Murmur sorts newest by 
           : null,
       );
       assert.equal(parsed.demoUrl, original.demoUrl ?? null);
-      assert.equal(parsed.repositoryUrl, original.repositoryUrl ?? null);
+      assert.equal(parsed.repositoryUrl, null);
     }
     if (!parsed.draft) all.push(parsed);
   }
