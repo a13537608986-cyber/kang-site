@@ -14,7 +14,7 @@ export function HomeViewpoint() {
     <p className={s.eyebrow}>00 / VIEWPOINT · 我怎么看</p>
     <div className={s.introGrid}>
       <blockquote className={s.statement}><span className="sr-only">{profile.viewpoint.join(" ")}</span><span aria-hidden="true">{profile.viewpoint.map(line => <span className={s.lineClip} key={line}>{Array.from(line).map((char, i) => <span className="vp-char" key={i}>{char}</span>)}</span>)}</span></blockquote>
-      <div className={s.principles}>{profile.viewpointPrinciples.map((item, i) => <div className="vp-principle" key={item.title}><div className={s.principleInner}><span className={s.principleDot} aria-hidden="true" /><span className={s.principleNumber}>0{i + 1}</span><p>{item.title}</p><small>{item.desc}</small><div className={s.principleImage} aria-hidden="true"><CoverImage src={`/images/home/orisa/sec-5-phase-${i + 1}.webp`} alt="" sizes="280px" /></div></div></div>)}</div>
+      <div className={s.principles}>{profile.viewpointPrinciples.map((item, i) => <div className="vp-principle" key={item.title}><div className={s.principleInner}><span className={s.principleDot} aria-hidden="true" /><span className={s.principleNumber}>0{i + 1}</span><p>{item.title}</p><small>{item.desc}</small><div className={s.principleImage} aria-hidden="true"><CoverImage src={`/images/home/viewpoint/principle-${i + 1}-v1.webp`} alt="" sizes="280px" /></div></div></div>)}</div>
     </div>
     <div className={s.chapterEnd}><span>想法，放进真实的产品里。</span><a href="#home-work">往下看作品 <span aria-hidden="true">↓</span></a></div>
   </div>;
