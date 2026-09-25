@@ -90,7 +90,7 @@ function SpotlightCard({ project }: { project: ProjectListItem }) {
           <span className="type-label rounded-full bg-fg px-3 py-1.5 text-bg">重点项目</span>
           <h2 className="type-headline mt-7 text-3xl leading-tight lg:text-5xl">{project.title}</h2>
           <p className="mt-5 max-w-lg text-base leading-relaxed text-fg-muted">{project.summary}</p>
-          <p className="type-label mt-7 text-fg-muted">{PROJECT_PAGE_TYPE_LABEL[project.type].zh} · {yearOf(project.date)}</p>
+          <p className="type-label mt-7 text-fg-muted">{project.slug === "canshen-ai" ? "项目复盘" : PROJECT_PAGE_TYPE_LABEL[project.type].zh} · {yearOf(project.date)}</p>
           <div className="mt-auto flex w-full flex-wrap items-end justify-between gap-6 pt-12 lg:pt-20">
             <div className="flex flex-wrap gap-2">
               {project.tags.slice(0, 4).map((tag) => (
@@ -98,7 +98,7 @@ function SpotlightCard({ project }: { project: ProjectListItem }) {
               ))}
             </div>
             <span className="type-label flex items-center gap-3">
-              查看项目
+              {project.slug === "canshen-ai" ? "查看复盘" : "查看项目"}
               <IconArrowRight aria-hidden="true" className="-rotate-45 transition-transform duration-300 group-hover:rotate-0 group-focus-visible:rotate-0 motion-reduce:transition-none" />
             </span>
           </div>
@@ -144,7 +144,7 @@ function ProjectCard({ project, index }: { project: ProjectListItem; index: numb
           {!coverContainsLabels && (
             <>
               <span className="type-label absolute left-4 top-4 rounded-full border border-line-strong bg-bg/90 px-3 py-1.5 backdrop-blur-md sm:left-5 sm:top-5">
-                {typeLabel.zh}
+                {project.slug === "canshen-ai" ? "项目复盘" : typeLabel.zh}
               </span>
               <div className="absolute inset-x-4 bottom-4 flex flex-wrap gap-2 sm:inset-x-5 sm:bottom-5">
                 {project.tags.slice(0, 3).map((tag) => (
@@ -169,7 +169,7 @@ function ProjectCard({ project, index }: { project: ProjectListItem; index: numb
           </p>
           <div className="type-label mt-auto flex items-center justify-between gap-3 pt-6 text-fg-muted">
             <span>{yearOf(project.date)}</span>
-            <span className="transition-colors group-hover:text-fg">{project.type === "case-study" ? "阅读复盘" : project.type === "skill" ? "查看 Skill" : "查看项目"}</span>
+            <span className="transition-colors group-hover:text-fg">{project.slug === "canshen-ai" ? "查看复盘" : project.type === "case-study" ? "阅读复盘" : project.type === "skill" ? "查看 Skill" : "查看项目"}</span>
           </div>
         </div>
       </Link>

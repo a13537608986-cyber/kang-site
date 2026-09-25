@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import type { ComponentPropsWithoutRef } from "react";
+import { Toc } from "@/components/articles/Toc";
+import { extractToc } from "@/lib/toc";
 import styles from "./detail.module.css";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -52,6 +55,8 @@ export default async function ProjectPage({ params }: Props) {
 
   const { default: Content } = await import(`@/content/projects/${slug}.mdx`);
   const { prev, next } = getAdjacentProjects(slug);
+  const isRetrospective = slug === "canshen-ai";
+  const toc = isRetrospective ? extractToc(project.body) : [];
   const typeLabel = PROJECT_PAGE_TYPE_LABEL[project.type];
   const heroCover = project.detailCover ?? project.cover;
 
@@ -81,7 +86,9 @@ export default async function ProjectPage({ params }: Props) {
           <span className="border border-line px-2 py-1">
             {typeLabel.en} · {typeLabel.zh}
           </span>
-          <time dateTime={project.date}>{formatDateLong(project.date)}</time>
+          <time dateTime={project.date}>
+            {isRetrospective ? "复盘日期 · " : ""}{formatDateLong(project.date)}
+          </time>
         </p>
 
         <h1 className="type-headline mt-6 text-[clamp(1.875rem,4.5vw,3.25rem)]">
@@ -141,9 +148,26 @@ export default async function ProjectPage({ params }: Props) {
         </figure>
       ) : null}
 
-      <div className="prose mx-auto mt-14 max-w-[44rem]">
-        <Content />
-      </div>
+      {isRetrospective ? (
+        <div className={styles.readingLayout}>
+          <aside className={styles.readingToc}>
+            <p className="type-label mb-5 text-fg-muted">复盘目录 / CONTENTS</p>
+            <Toc items={toc.map((item) => ({ ...item, text: item.text.replace(/^\d+\s+/, "") }))} variant="sidebar" />
+          </aside>
+          <div className="min-w-0">
+            <div className="mb-8 lg:hidden">
+              <Toc items={toc} variant="collapsible" />
+            </div>
+            <div className="prose">
+              <Content components={{ h1: RetrospectiveTitle }} />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="prose mx-auto mt-14 max-w-[44rem]">
+          <Content />
+        </div>
+      )}
 
       {/* 相邻项目 */}
       <nav
@@ -155,6 +179,10 @@ export default async function ProjectPage({ params }: Props) {
       </nav>
     </article>
   );
+}
+
+function RetrospectiveTitle(props: ComponentPropsWithoutRef<"h2">) {
+  return <h2 {...props} className={styles.bodyTitle} />;
 }
 
 function PagerCell({
