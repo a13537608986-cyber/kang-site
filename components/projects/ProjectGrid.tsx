@@ -120,7 +120,7 @@ function SpotlightCard({ project }: { project: ProjectListItem }) {
 
 function ProjectCard({ project, index }: { project: ProjectListItem; index: number }) {
   const typeLabel = PROJECT_PAGE_TYPE_LABEL[project.type];
-  const coverContainsLabels = ["zhijian-mindmap", "product-doc-assistant", "xhs-report-agent"].includes(project.slug);
+  const coverContainsLabels = ["zhijian-mindmap", "product-doc-assistant", "xhs-report-agent", "rovlet"].includes(project.slug);
   return (
     <li className="min-w-0">
       <Link

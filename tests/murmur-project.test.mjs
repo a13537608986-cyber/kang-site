@@ -226,14 +226,21 @@ test("Murmur frontmatter parses with exact public links and publishing boundarie
   assert.deepEqual(meta.tags, ["macOS", "语音输入", "翻译工具", "Vibe Coding"]);
 });
 
-test("all existing projects preserve default actions and Murmur sorts newest by date", async () => {
+test("all existing projects preserve default actions and Rovlet sorts newest by date", async () => {
   const all = [];
   for (const name of await readdir(projectsDir)) {
     if (!name.endsWith(".mdx")) continue;
     const original = await metadata(new URL(name, projectsDir));
     const parsed = projectSchema.parse(original);
     assert.equal(parsed.slug, name.slice(0, -4));
-    if (name !== "murmur.mdx") {
+    if (name === "rovlet.mdx") {
+      assert.equal(parsed.downloadUrl, "https://github.com/a13537608986-cyber/atrium/releases/tag/rovlet-0.1.0-internal");
+      assert.equal(parsed.downloadLabel, "下载 Rovlet");
+      assert.equal(parsed.cover, "/images/projects/rovlet/cover-list-v1.webp");
+      assert.equal(parsed.detailCover, "/images/projects/rovlet/cover-detail-v1.webp");
+      assert.equal(parsed.demoUrl, null);
+      assert.equal(parsed.repositoryUrl, null);
+    } else if (name !== "murmur.mdx") {
       assert.equal(parsed.downloadUrl, null);
       assert.equal(parsed.downloadLabel, "下载应用");
       assert.equal(parsed.actionNote, null);
@@ -255,7 +262,7 @@ test("all existing projects preserve default actions and Murmur sorts newest by 
     }
     if (!parsed.draft) all.push(parsed);
   }
-  assert.equal(all.sort(dates.byDateDesc)[0].slug, "murmur");
+  assert.equal(all.sort(dates.byDateDesc)[0].slug, "rovlet");
 });
 
 test("strict metadata rejects unknown fields, invalid downloads and empty labels", async () => {

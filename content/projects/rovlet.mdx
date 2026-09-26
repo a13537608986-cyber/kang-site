@@ -1,0 +1,48 @@
+---
+title: "Rovlet"
+slug: "rovlet"
+type: "product"
+date: "2026-09-26T10:41:06+08:00"
+summary: "一个面向 macOS 的 AI coding agent 工作区。把本地项目、任务、Agent 对话和结果审查放在同一个可视化空间。"
+cover: "/images/projects/rovlet/cover-list-v1.webp"
+detailCover: "/images/projects/rovlet/cover-detail-v1.webp"
+featured: false
+demoUrl: null
+downloadUrl: "https://github.com/a13537608986-cyber/atrium/releases/tag/rovlet-0.1.0-internal"
+downloadLabel: "下载 Rovlet"
+actionNote: "macOS 预览版 · Apple Silicon / Intel · 需安装并登录本地 AI CLI"
+tags: ["macOS", "AI Coding", "多 Agent", "桌面应用"]
+draft: false
+---
+
+## 让多个 AI coding agents 在一个工作区协作
+
+Rovlet 是一款面向 Mac 的 AI coding agent 工作区。它把项目、任务看板、Agent 对话和结果审查放进同一个可视化空间：你可以把工作交给不同的 Agent，随时看清进展，在需要决定的地方介入，再检查它们改了什么。
+
+它连接你本机已经安装的 Claude Code、Pi、Codex 或 OpenCode。Rovlet 不提供独立的 AI 模型，也不替你完成账号登录；它做的是把这些工具在真实项目中的工作组织起来，让你始终掌握任务和结果。
+
+## 从任务到结果，看得见的工作流
+
+从本机选择一个项目目录，在画布上放下项目看板。用 **Backlog、In Progress、Needs Input、Done** 区分任务状态；每块看板对应一个项目，多个项目可以同时摆在同一个空间里。
+
+写下要完成的任务，选择 Agent 使用的 CLI、模型和权限，再把任务派出去。执行过程中可以打开 Agent 对话继续沟通；遇到需要确认的问题，任务会进入 **Needs Input**，由你决定下一步。
+
+![Rovlet 的真实桌面界面：两个项目看板展示任务状态；画面中的项目与任务均为开发验收示例](/images/projects/rovlet/workspace-demo.webp)
+
+*界面截图来自产品开发验收，项目与任务为示例数据。封面是基于产品界面制作的宣传视觉。*
+
+## 不止看到“完成了”
+
+- **Changes**：查看当前工作区相对最新提交的未提交改动；有轮次记录时，也可以切换查看对应轮次。
+- **Preview**：项目配置并启动开发服务器后，在 Rovlet 内打开网页预览；多个方案有可运行服务时，可以并排比较。
+- **独立尝试**：Git 项目可以为任务使用独立分支和 worktree，让多个方案互不覆盖。标记优胜方案只记录选择，不会自动合并代码。
+
+从派活、介入到审查，最后一步仍由你决定：继续修改、保留结果，或选择另一个方案。
+
+## 开始使用
+
+下载与你的 Mac 芯片对应的 DMG，拖入“应用程序”后启动。首次使用时，先在本机安装并登录 Claude Code、Pi、Codex 或 OpenCode 中至少一种，再在 Rovlet 里添加项目。
+
+创建任务后，**Create 只生成任务卡；点击尚未派活的任务卡，才会启动 Agent**。想使用 Changes 和多版本尝试，建议从 Git 项目开始；Preview 则需要项目有可运行的开发服务器，并在设置中配置启动命令。
+
+当前提供 **0.1.0 小范围预览版**，页面上方的「下载 Rovlet」直达 GitHub Release，可选择 Apple Silicon 或 Intel 安装包。安装包尚未经过 Apple 公证，首次打开可能需要在 macOS“隐私与安全性”中手动允许。Apple Silicon 版已完成隔离环境中的安装和启动检查；Intel 版已检查安装包结构，尚未在 Intel Mac 上实机验收。
